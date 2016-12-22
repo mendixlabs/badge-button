@@ -3,7 +3,7 @@
     xmlns="http://www.mendix.com/widget/1.0/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../xsd/widget.xsd">
     <name>Badge</name>
-    <description>A badge is a special distinctive mark.</description>
+    <description>Badges are numerical indicators of how many items are associated with a link.</description>
     <icon>
     /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAARABwDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAUDBAYH/8QAKRAAAQMDAQcEAwAAAAAAAAAAAQACAwQFESEGEhY1UXORIjFUsYGS4f/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A6DLI+WRz5HFz3HJJOpKY2mx1t1jfJStYI2HdLnuwCegSwjBIPunFj2gqbRC+KJkckTnb2H50P4RFvg+6dYP3/iVvkrrZLJSmWWFzHepjXaZ6p5xtV/Fg8lZ6tqZ7hVy1UwzJIcndGg0xjwgkvfN6zuu+1SQhFC2WyPK3d0/QQhB//9k=
     </icon>
@@ -11,7 +11,70 @@
         <property key="label" type="translatableString" required="false">
             <caption>Label</caption>
             <category>Display</category>
-            <description>The label's static text</description>
+            <description>The label to display before the badge/label</description>
+        </property>
+        <property key="width" type="integer" defaultValue="250">
+            <caption>Width</caption>
+            <category>Display</category>
+            <description>The width in pixels of the widget. If 0 it will be 100%</description>
+        </property>
+        <property key="badgeType" type="enumeration" required="true" defaultValue="badge">
+            <caption>Type</caption>
+            <category>Display</category>
+            <description>Render either the display of a label or of a badge</description>
+            <enumerationValues>
+                <enumerationValue key="badge">badge</enumerationValue>
+                <enumerationValue key="btn">badge button</enumerationValue>
+                <enumerationValue key="label">label</enumerationValue>
+            </enumerationValues>
+        </property>
+        <property key="badgeClass" type="enumeration" required="true" defaultValue="default">
+            <caption>Style</caption>
+            <category>Display</category>
+            <description>The styling and color of the badge/label using Bootstrap classes.</description>
+            <enumerationValues>
+                <enumerationValue key="default">Default</enumerationValue>
+                <enumerationValue key="primary">Primary</enumerationValue>
+                <enumerationValue key="success">Success</enumerationValue>
+                <enumerationValue key="info">Info</enumerationValue>
+                <enumerationValue key="warning">Warning</enumerationValue>
+                <enumerationValue key="danger">Danger</enumerationValue>
+            </enumerationValues>
+        </property>
+        <property key="attrStyle" type="attribute" required="false">
+            <caption>Bootstrap Style</caption>
+            <category>Data source</category>
+            <description>Value of attribute should be: info, warning, danger, success. Alternatively use the 'Class bar' property set styling</description>
+            <attributeTypes>
+                <attributeType name="Enum" />
+                <attributeType name="String" />
+            </attributeTypes>
+        </property>
+        <property key="attrLabel" type="attribute" required="false">
+            <caption>Label attribute</caption>
+            <category>Data source</category>
+            <description>The attribute that contains the label for the widget</description>
+            <attributeTypes>
+                <attributeType name="Enum" />
+                <attributeType name="String" />
+            </attributeTypes>
+        </property>
+        <property key="attrValue" type="attribute">
+            <caption>Data attribute</caption>
+            <category>Data source</category>
+            <description>The attribute that contains the label/badge value</description>
+            <attributeTypes>
+                <attributeType name="String" />
+                <attributeType name="Integer" />
+                <attributeType name="Decimal" />
+                <attributeType name="Long" />
+            </attributeTypes>
+        </property>
+        <property key="onclickMicroflow" type="microflow" required="false">
+            <caption>Click MicroFlow</caption>
+            <category>Behaviour</category>
+            <description>If set the MF will be called on click on the Badge/Label</description>
+            <returnType type="Void" />
         </property>
     </properties>
 </widget>
