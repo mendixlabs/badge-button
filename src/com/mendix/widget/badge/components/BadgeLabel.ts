@@ -1,5 +1,6 @@
 import { DOM, createElement } from "react";
 import * as classNames from "classnames";
+
 import { BadgeProps } from "./Badge";
 
 export const BadgeLabel = (props: BadgeProps) =>
