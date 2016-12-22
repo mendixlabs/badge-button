@@ -1,16 +1,14 @@
 import { shallow } from "enzyme";
 import { DOM, createElement } from "react";
 
-import { BadgeProps, OnClickProps } from "../Badge";
+import { BadgeProps } from "../Badge";
 import { BadgeLabel } from "../BadgeLabel";
 
-import { mockMendix } from "../../../../../../../tests/mocks/Mendix";
-
-describe("BadgeLabel", () => {
+describe("Badge label", () => {
     let badgeProps: BadgeProps;
+    const createBadge = (props: BadgeProps) => shallow(createElement(BadgeLabel, props));
 
     beforeEach(() => {
-
         badgeProps = {
             badgeValue: "0",
             label: "default",
@@ -19,14 +17,12 @@ describe("BadgeLabel", () => {
         };
     });
 
-    const createBadge = (props: BadgeProps) => shallow(createElement(BadgeLabel, props));
-
     it("should render the structure", () => {
         const badgeComponent = createBadge(badgeProps);
         expect(badgeComponent).toBeElement(
             DOM.div(
                 {
-                    className: "widget-badge-display",
+                    className: "widget-badge-display widget-badge-link",
                     onClick: jasmine.any(Function) as any
                 },
                 DOM.span({ className: "widget-badge-text" }, badgeProps.label),
@@ -37,26 +33,28 @@ describe("BadgeLabel", () => {
 
     it("with style 'success' should have class 'widget-badge label label-success'", () => {
         badgeProps.style = "success";
+
         const badgeComponent = createBadge(badgeProps);
+
         expect(badgeComponent.childAt(1).hasClass("widget-badge label label-success")).toBe(true);
     });
 
-    it("should respond to click event", () => {
-        let clickReturn = 0;
-        badgeProps.onClick = () => clickReturn++;
-        const badgeComponent = createBadge(badgeProps);
+    describe("click event", () => {
 
-        badgeComponent.simulate("click");
+        it("with click function should respond to click event", () => {
+            const onClick = badgeProps.onClick = jasmine.createSpy("onClick");
+            const badgeComponent = createBadge(badgeProps);
 
-        expect(clickReturn).toBe(1);
-    });
+            badgeComponent.simulate("click");
 
-    describe("without an onClick microflow", () => {
+            expect(onClick).toHaveBeenCalledTimes(1);
+        });
 
-        it("should render the structure", () => {
+        it("without click function should render the structure", () => {
             badgeProps.onClick = undefined;
 
             const badgeComponent = createBadge(badgeProps);
+
             expect(badgeComponent).toBeElement(
                 DOM.div(
                     {
@@ -69,5 +67,4 @@ describe("BadgeLabel", () => {
 
         });
     });
-
 });

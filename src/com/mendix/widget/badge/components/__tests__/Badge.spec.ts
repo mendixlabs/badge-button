@@ -1,14 +1,13 @@
 import { shallow } from "enzyme";
 import { DOM, createElement } from "react";
 
-import { Badge, BadgeProps, OnClickProps } from "../Badge";
+import { Badge, BadgeProps } from "../Badge";
 
 describe("Badge", () => {
     let badgeProps: BadgeProps;
-    let onClickProps: {};
+    const createBadge = (props: BadgeProps) => shallow(createElement(Badge, props));
 
     beforeEach(() => {
-
         badgeProps = {
             badgeValue: "0",
             label: "default",
@@ -17,66 +16,46 @@ describe("Badge", () => {
         };
     });
 
-    const createBadge = (props: BadgeProps) => shallow(createElement(Badge, props));
+    it("should render the structure", () => {
+        const badgeComponent = createBadge(badgeProps);
 
-    describe("of type badge", () => {
+        expect(badgeComponent).toBeElement(
+            DOM.div(
+                {
+                    className: "widget-badge-display widget-badge-link",
+                    onClick: jasmine.any(Function) as any
+                },
+                DOM.span({ className: "widget-badge-text" }, badgeProps.label),
+                DOM.span({ className: "widget-badge badge label-default" }, badgeProps.badgeValue)
+            )
+        );
+    });
 
-        it("should render the structure", () => {
-            const badgeComponent = createBadge(badgeProps);
+    it("with style 'success' should have class 'widget-badge badge label-success'", () => {
+        badgeProps.style = "success";
 
-            expect(badgeComponent).toBeElement(
-                DOM.div(
-                    {
-                        className: "widget-badge-display",
-                        onClick: jasmine.any(Function) as any
-                    },
-                    DOM.span({ className: "widget-badge-text" }, badgeProps.label),
-                    DOM.span({ className: "widget-badge badge label-default" }, badgeProps.badgeValue)
-                )
-            );
-        });
+        const badgeComponent = createBadge(badgeProps);
 
-        it("with style 'success' should have class 'widget-badge badge label-success'", () => {
-            badgeProps.style = "success";
-            const badgeComponent = createBadge(badgeProps);
-            expect(badgeComponent.childAt(1).hasClass("widget-badge badge label-success")).toBe(true);
-        });
+        expect(badgeComponent.childAt(1).hasClass("widget-badge badge label-success")).toBe(true);
+    });
 
-        it("should respond to click event", () => {
-            let clickReturn = 0;
-            badgeProps.onClick = () => clickReturn++;
+
+    describe("click event", () => {
+
+        it("with click function should respond to click event", () => {
+            const onClick = badgeProps.onClick = jasmine.createSpy("onClick");
             const badgeComponent = createBadge(badgeProps);
 
             badgeComponent.simulate("click");
 
-            expect(clickReturn).toBe(1);
+            expect(onClick).toHaveBeenCalledTimes(1);
         });
 
-    });
-
-    // describe("with an onClick microflow", () => {
-    //     it("executes the microflow when a badge / label item is clicked", () => {
-    //         spyOn(window.mx.ui, "action").and.callThrough();
-    //         const badgeComponent = createBadge(badgeProps);
-
-    //         badgeComponent.simulate("click");
-
-    //         expect(window.mx.ui.action).toHaveBeenCalledWith(badgeProps.MicroflowProps.microflow, {
-    //             error: jasmine.any(Function),
-    //             params: {
-    //                 applyto: "selection",
-    //                 guids: [ badgeProps.MicroflowProps.guid ]
-    //             }
-    //         });
-    //     });
-    // });
-
-    describe("without an onClick microflow", () => {
-
-        it("should render the structure", () => {
+        it("without click function should render the structure", () => {
             badgeProps.onClick = undefined;
 
             const badgeComponent = createBadge(badgeProps);
+
             expect(badgeComponent).toBeElement(
                 DOM.div(
                     {
@@ -86,8 +65,6 @@ describe("Badge", () => {
                     DOM.span({ className: "widget-badge badge label-default" }, badgeProps.badgeValue)
                 )
             );
-
         });
     });
-
 });

@@ -8,15 +8,6 @@ export interface BadgeProps {
     onClick?: () => void;
 }
 
-export interface OnClickProps {
-    // action: "None" | "ExecuteMicroFlow" | "OpenPage";
-    microflow?: string;
-    guid?: string;
-    applyto?: string;
-}
-
-export type BadgeType = "btn" | "label" | "badge";
-
 export const Badge = (props: BadgeProps) =>
     createElement("div",
         {

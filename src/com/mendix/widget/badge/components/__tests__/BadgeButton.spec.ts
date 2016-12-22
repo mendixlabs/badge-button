@@ -1,11 +1,13 @@
 import { shallow } from "enzyme";
 import { DOM, createElement } from "react";
 
-import { Badge, BadgeProps, OnClickProps } from "../Badge";
+import { Badge, BadgeProps } from "../Badge";
 import { BadgeButton } from "../BadgeButton";
 
-describe("BadgeComponent", () => {
+describe("Badge button", () => {
     let badgeProps: BadgeProps;
+    const createBadge = (props: BadgeProps) => shallow(createElement(BadgeButton, props));
+
     beforeEach(() => {
         badgeProps = {
             badgeValue: "0",
@@ -14,8 +16,6 @@ describe("BadgeComponent", () => {
             style: "default"
         };
     });
-
-    const createBadge = (props: BadgeProps) => shallow(createElement(BadgeButton, props));
 
     it("should render the structure", () => {
         const badgeComponent = createBadge(badgeProps);
@@ -37,18 +37,18 @@ describe("BadgeComponent", () => {
         expect(badgeComponent.hasClass("widget-badge btn btn-success")).toBe(true);
     });
 
-    it("should respond to click event", () => {
-        let clickReturn = 0;
-        badgeProps.onClick = () => clickReturn++;
-        const badgeComponent = createBadge(badgeProps);
+    describe("click event", () => {
 
-        badgeComponent.simulate("click");
+        it("with click function should respond to click event", () => {
+            const onClick = badgeProps.onClick = jasmine.createSpy("onClick");
+            const badgeComponent = createBadge(badgeProps);
 
-        expect(clickReturn).toBe(1);
-    });
+            badgeComponent.simulate("click");
 
-    describe("without an onClick microflow", () => {
-        it("should render structure", () => {
+            expect(onClick).toHaveBeenCalledTimes(1);
+        });
+
+        it("without click function should render structure", () => {
             badgeProps.onClick = undefined;
 
             const badgeComponent = createBadge(badgeProps);

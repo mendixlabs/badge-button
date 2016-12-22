@@ -1,13 +1,12 @@
 ### Description
 
-Badges are numerical indicators of how many items are associated with a link.
-Labels are used to provide additional information about something.
+Badge is a special distinctive mark or token put on any display
 
 ### Features
 
- * Showing notifications about a given task.
- * Provide additional information about a specific subject.
- * Can be nested in a button, to provide dynamic information about a given button.
+ * Ability to display a badge on a button.
+ * Ability to attach an onclick microflow 
+ * Ability to set a static label text when the persisted label is empty or not specified
 
 ### Dependencies
 
