@@ -7,9 +7,7 @@ module.exports = {
     output: {
         path: __dirname + "/dist/tmp",
         filename: "src/com/mendix/widget/badge/Badge.js",
-        libraryTarget: "umd",
-        umdNamedDefine: true,
-        library: "com.mendix.widget.badge.Badge"
+        libraryTarget: "umd"
     },
     resolve: {
         extensions: [ "", ".ts", ".js", ".json" ]
