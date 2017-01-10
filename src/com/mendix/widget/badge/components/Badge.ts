@@ -6,6 +6,7 @@ export interface BadgeProps {
     badgeValue?: string;
     style?: string;
     onClick?: () => void;
+    disabled?: string;
 }
 
 export const Badge = (props: BadgeProps) =>
@@ -14,7 +15,8 @@ export const Badge = (props: BadgeProps) =>
             className: classNames("widget-badge-display",
                 { "widget-badge-link": !!props.onClick }
             ),
-            onClick: props.onClick
+            onClick: props.onClick,
+            disabled: props.disabled
         },
         DOM.span({ className: "widget-badge-text" }, props.label),
         DOM.span({

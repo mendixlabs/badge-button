@@ -47,6 +47,7 @@ class Badge extends WidgetBase {
 
         render(createElement(BadgeElement as any, {
             badgeValue: this.getValue(this.attrValue, ""),
+            disabled: this.contextObject ? undefined : "disabled",
             label: this.getValue(this.attrLabel, this.label),
             onClick: clickAble ? () => this.onClickMF() : undefined,
             style: this.getValue(this.attrStyle, this.badgeClass)

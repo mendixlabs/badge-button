@@ -9,6 +9,7 @@ export const BadgeLabel = (props: BadgeProps) =>
             className: classNames("widget-badge-display",
                 { "widget-badge-link": !!props.onClick }
             ),
+            disabled: props.disabled,
             onClick: props.onClick
         },
         DOM.span({ className: "widget-badge-text" }, props.label),

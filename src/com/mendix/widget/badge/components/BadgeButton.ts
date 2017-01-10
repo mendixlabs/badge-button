@@ -9,6 +9,7 @@ export const BadgeButton = (props: BadgeProps) =>
             className: classNames("widget-badge btn",
                 { [`btn-${props.style}`]: !!props.style }
             ),
+            disabled: props.disabled,
             onClick: props.onClick
         },
         DOM.span({ className: "widget-badge-text" }, props.label),
