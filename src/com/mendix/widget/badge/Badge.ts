@@ -67,7 +67,7 @@ class Badge extends WidgetBase {
                 window.mx.ui.error(`Error while executing MicroFlow: ${this.onclickMicroflow}: ${error.message}`),
             params: {
                 applyto: "selection",
-                guids: [this.contextObject.getGuid()]
+                guids: [ this.contextObject.getGuid() ]
             }
         });
     }
