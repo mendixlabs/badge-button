@@ -7,16 +7,24 @@ Object.assign(webpackConfig, {
         "react/lib/ReactContext",
         "react/addons",
         "jsdom"
-    ]),
-    postLoaders: [ {
-        test: /\.ts$/,
-        loader: "istanbul-instrumenter",
-        include: path.resolve(__dirname, "src"),
-        exclude: /\.(spec)\.ts$/
-    } ]
+    ])
 });
 
 module.exports = function(config) {
+    if (config.instrumenter) {
+        console.log("With instrumenter");
+        Object.assign(webpackConfig, {
+            module: Object.assign(webpackConfig.module, {
+                postLoaders: [ {
+                    test: /\.ts$/,
+                    loader: "istanbul-instrumenter",
+                    include: path.resolve(__dirname, "src"),
+                    exclude: /\.(spec)\.ts$/
+                } ]
+            })
+        });
+    }
+
     config.set({
         basePath: "",
         frameworks: [ "jasmine" ],
@@ -27,10 +35,12 @@ module.exports = function(config) {
             "tests/test-index.js"
         ],
         exclude: [],
-        preprocessors: { "tests/test-index.js": [ "webpack", "sourcemap" ] },
+        preprocessors: {
+            "tests/test-index.js": [ "webpack", "sourcemap" ]
+        },
         webpack: webpackConfig,
         webpackServer: { noInfo: true },
-        reporters: [ "progress", "kjhtml", "coverage" ],
+        reporters: [ "progress", config.instrumenter ? "coverage" : "kjhtml" ],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
