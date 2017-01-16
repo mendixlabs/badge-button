@@ -4,9 +4,9 @@ Badge is a special distinctive mark or token put on any display
 
 ### Features
 
- * Ability to display a badge on a button.
- * Ability to attach an onclick microflow 
- * Ability to set a static label text when the persisted label is empty or not specified
+ * Display a badge on a button.
+ * Attach an onclick microflow 
+ * Set a static label text when the persisted label is empty or not specified
 
 ### Dependencies
 
