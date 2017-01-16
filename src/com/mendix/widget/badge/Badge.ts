@@ -9,20 +9,39 @@ import { BadgeButton } from "./components/BadgeButton";
 import { BadgeLabel } from "./components/BadgeLabel";
 
 export interface OnClickProps {
-    microflow?: string;
-    guid?: string;
-    applyto?: string;
+    onClickType: badgeOnclick;
+    microflowProps?: MicroflowProps;
+    pageProps?: PageProps;
 }
+
+export interface MicroflowProps {
+    microflow: string;
+    guid: string;
+}
+
+export interface PageProps {
+    page: string;
+    pageSetting: PageSettings;
+    entity: string;
+    guid: string;
+}
+
+export type badgeOnclick = "doNothing" | "showPage" | "callMicroflow";
+export type PageSettings = "content" | "popup" | "modal";
 
 class Badge extends WidgetBase {
     // Attributes from modeler
-    private attrValue: string;
-    private attrStyle: string;
-    private attrLabel: string;
-    private badgeType: "btn" | "label" | "badge";
+    private valueAttribute: string;
+    private styleAttribute: string;
+    private labelAttribute: string;
+    private badgeType: "button" | "label" | "badge";
     private label: string;
     private badgeClass: string;
-    private onclickMicroflow: string;
+    private microflow: string;
+    onClickEvent: badgeOnclick;
+    page: string;
+    pageSettings: PageSettings;
+
     // Internal variables
     private contextObject: mendix.lib.MxObject;
 
@@ -34,23 +53,36 @@ class Badge extends WidgetBase {
         this.contextObject = object;
         this.resetSubscriptions();
         this.updateRendering();
+        this.checkConfig();
 
         callback();
     }
 
     private updateRendering() {
-        const BadgeElement = this.badgeType === "btn" ? BadgeButton
+        const BadgeElement = this.badgeType === "button" ? BadgeButton
             : this.badgeType === "label" ? BadgeLabel
             : BadgeComponent;
 
-        const clickAble = this.contextObject && this.contextObject.getGuid() && this.onclickMicroflow;
+        const clickable = this.contextObject && this.microflow;
 
         render(createElement(BadgeElement as any, {
-            badgeValue: this.getValue(this.attrValue, ""),
+            badgeValue: this.getValue(this.valueAttribute, ""),
             disabled: this.contextObject ? undefined : "disabled",
-            label: this.getValue(this.attrLabel, this.label),
-            onClick: clickAble ? () => this.onClickMF() : undefined,
-            style: this.getValue(this.attrStyle, this.badgeClass)
+            label: this.getValue(this.labelAttribute, this.label),
+            onClick: () => this.onClickMicroflow({
+                microflowProps: {
+                    guid: this.contextObject.getGuid(),
+                    microflow: this.microflow
+                },
+                onClickType: this.onClickEvent,
+                pageProps: {
+                    entity: this.contextObject.getEntity(),
+                    guid: this.contextObject.getGuid(),
+                    page: this.page,
+                    pageSetting: this.pageSettings
+                }
+            }),
+            style: this.getValue(this.styleAttribute, this.badgeClass)
         }), this.domNode);
     }
 
@@ -61,15 +93,42 @@ class Badge extends WidgetBase {
         return defaultValue;
     }
 
-    private onClickMF () {
-        window.mx.ui.action(this.onclickMicroflow, {
-            error: (error: Error) =>
-                window.mx.ui.error(`Error while executing MicroFlow: ${this.onclickMicroflow}: ${error.message}`),
-            params: {
-                applyto: "selection",
-                guids: [ this.contextObject.getGuid() ]
-            }
-        });
+    private checkConfig() {
+        let errorMessage: string[] = [];
+        if (this.onClickEvent === "callMicroflow"
+            && !this.microflow) {
+            errorMessage.push("'On click' call a microFlow is set " +
+                "and there is no 'Microflow' Selected in tab Events");
+        }
+        if (this.onClickEvent === "showPage" && !this.page) {
+            errorMessage.push("'On click' Show a page is set and there is no 'Page' Selected in tab 'Events'");
+        }
+        if (errorMessage.length > 0) {
+            errorMessage.unshift("Error in configuration of the Progress circle widget");
+            window.mx.ui.error(errorMessage.join("\n"));
+        }
+    }
+
+    private onClickMicroflow(props: OnClickProps) {
+        if (props.onClickType === "callMicroflow" && props.microflowProps.microflow && props.microflowProps.guid) {
+            window.mx.ui.action(this.microflow, {
+                error: (error: Error) =>
+                    window.mx.ui.error(`Error while executing MicroFlow: ${this.microflow}: ${error.message}`),
+                params: {
+                    applyto: "selection",
+                    guids: [ this.contextObject.getGuid() ]
+                }
+            });
+        } else if (props.onClickType === "showPage" && props.pageProps.page && props.pageProps.guid) {
+            let context = new window.mendix.lib.MxContext();
+            context.setTrackId(props.pageProps.guid);
+            context.setTrackEntity(props.pageProps.entity);
+
+            window.mx.ui.openForm(props.pageProps.page, {
+                context,
+                location: props.pageProps.pageSetting
+            });
+        }
     }
 
     private resetSubscriptions() {
@@ -81,17 +140,17 @@ class Badge extends WidgetBase {
                 guid: this.contextObject.getGuid()
             });
             this.subscribe({
-                attr: this.attrValue,
+                attr: this.valueAttribute,
                 callback: () => this.updateRendering(),
                 guid: this.contextObject.getGuid()
             });
             this.subscribe({
-                attr: this.attrStyle,
+                attr: this.styleAttribute,
                 callback: () => this.updateRendering(),
                 guid: this.contextObject.getGuid()
             });
             this.subscribe({
-                attr: this.attrLabel,
+                attr: this.labelAttribute,
                 callback: () => this.updateRendering(),
                 guid: this.contextObject.getGuid()
             });
@@ -100,8 +159,7 @@ class Badge extends WidgetBase {
 }
 
 // tslint:disable : only-arrow-functions
-dojoDeclare("com.mendix.widget.badge.Badge", [ WidgetBase ],
-    (function(Source: any) {
+dojoDeclare("com.mendix.widget.badge.Badge", [ WidgetBase ], (function(Source: any) {
         let result: any = {};
         for (let i in Source.prototype) {
             if (i !== "constructor" && Source.prototype.hasOwnProperty(i)) {
