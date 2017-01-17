@@ -69,6 +69,19 @@ class MxUiMock implements mx.ui {
     showLogin(messageCode: number): void { /* */ }
 }
 
+export class MockContext implements mendix.lib.MxContext {
+    constructor(){}
+    getTrackEntity(): string { return "mockEntity"; }
+    getTrackId(): string { return "mockID"; }
+    getTrackObject(): mendix.lib.MxObject { return new mendix.lib.MxObject; } //TODO update
+    hasTrackEntity(): boolean { return true; }
+    hasTrackId(): boolean { return true; }
+    hasTrackObject(): boolean { return true; }
+    setTrackId(guid: string): void { }
+    setTrackEntity(entity: string): void { }
+    setTrackObject(obj: mendix.lib.MxObject): void { }
+}
+
 let mxMockObject =  MxMock.prototype;
 mxMockObject.ui = MxUiMock.prototype;
 

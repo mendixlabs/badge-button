@@ -2,6 +2,9 @@ import { shallow } from "enzyme";
 import { DOM, createElement } from "react";
 
 import { Badge, BadgeProps } from "../Badge";
+import { OnClickProps } from "../../Badge";
+
+import { MockContext, mockMendix } from "tests/mocks/Mendix";
 
 describe("Badge", () => {
     let badgeProps: BadgeProps;
@@ -14,6 +17,8 @@ describe("Badge", () => {
             onClick: jasmine.createSpy("OnClick"),
             style: "default"
         };
+        window.mx = mockMendix;
+        window.mendix = { lib: { MxContext: MockContext } };
     });
 
     it("should render the structure", () => {
@@ -65,6 +70,26 @@ describe("Badge", () => {
                     DOM.span({ className: "widget-badge badge label-default" }, badgeProps.badgeValue)
                 )
             );
+        });
+
+        describe("with an onClick show page set", () => {
+            it("invalid microflow shows an error when a badge is clicked", () => {
+                const invalidAction = "invalid_action";
+                const errorMessage = "Error while executing microflow: invalid_action: mx.ui.action error mock";
+                const onclickProps: OnClickProps = {
+                    microflowProps: {
+                        guid: "2",
+                        microflow: "invalid_action"
+                    },
+                    onClickType: "callMicroflow"
+                };
+
+                spyOn(window.mx.ui, "action").and.callFake((actionname: string, action: { error: (e: Error) => void }) => {
+                    if (actionname === invalidAction) {
+                        action.error(new Error("mx.ui.action error mock"));
+                    }
+                });
+            });
         });
     });
 });
