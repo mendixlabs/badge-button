@@ -62,7 +62,6 @@ describe("Badge button", () => {
                     DOM.span({ className: "badge" }, badgeProps.badgeValue)
                 )
             );
-
         });
     });
 

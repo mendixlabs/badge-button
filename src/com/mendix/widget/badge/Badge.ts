@@ -94,7 +94,7 @@ class Badge extends WidgetBase {
     }
 
     private checkConfig() {
-        let errorMessage: string[] = [];
+        const errorMessage: string[] = [];
         if (this.onClickEvent === "callMicroflow"
             && !this.microflow) {
             errorMessage.push("'On click' call a microFlow is set " +
@@ -120,7 +120,7 @@ class Badge extends WidgetBase {
                 }
             });
         } else if (props.onClickType === "showPage" && props.pageProps.page && props.pageProps.guid) {
-            let context = new window.mendix.lib.MxContext();
+            const context = new window.mendix.lib.MxContext();
             context.setTrackId(props.pageProps.guid);
             context.setTrackEntity(props.pageProps.entity);
 

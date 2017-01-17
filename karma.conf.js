@@ -1,3 +1,4 @@
+const path = require("path");
 var webpackConfig = require("./webpack.config");
 Object.assign(webpackConfig, {
     debug: true,
@@ -12,7 +13,6 @@ Object.assign(webpackConfig, {
 
 module.exports = function(config) {
     if (config.instrumenter) {
-        console.log("With instrumenter");
         Object.assign(webpackConfig, {
             module: Object.assign(webpackConfig.module, {
                 postLoaders: [ {
