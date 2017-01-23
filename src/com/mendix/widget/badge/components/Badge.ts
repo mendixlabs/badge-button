@@ -33,7 +33,7 @@ export interface BadgeProps {
 
 export class Badge extends Component<BadgeProps, {}> {
     static defaultProps: BadgeProps = {
-        badgeType: "label",
+        badgeType: "badge",
         badgeValue: "0",
         label: "default",
         style: "default"
@@ -65,7 +65,7 @@ export class Badge extends Component<BadgeProps, {}> {
         return createElement("div",
             {
                 className: classNames("widget-badge-display",
-                    { "widget-badge-link": !!this.handleOnClick(this.props.badgeOnClick) }
+                    { "widget-badge-link": !!this.props.badgeOnClick }
                 ),
                 onClick: () => this.handleOnClick(this.props.badgeOnClick)
             },
@@ -120,7 +120,7 @@ export class Badge extends Component<BadgeProps, {}> {
             errorMessage.push("'On click' Show a page is set and there is no 'Page' Selected in tab 'Events'");
         }
         if (errorMessage.length > 0) {
-            errorMessage.unshift("Error in configuration of the Progress circle widget");
+            errorMessage.unshift("Error in configuration of the Badge widget");
             window.mx.ui.error(errorMessage.join("\n"));
         }
     }

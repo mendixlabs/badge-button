@@ -8,6 +8,7 @@ import { MockContext, mockMendix } from "tests/mocks/Mendix";
 describe("Badge", () => {
     let badgeProps: BadgeProps;
     const createBadge = (props: BadgeProps) => shallow(createElement(Badge, props));
+    const newBadgeInstance = (props: BadgeProps) => createBadge(props).instance() as Badge;
     const clickProps: OnClickProps = { onClickType: "doNothing" };
 
     beforeEach(() => {
@@ -46,7 +47,7 @@ describe("Badge", () => {
     });
 
     describe("with an onClick microflow set", () => {
-        it("executes the microflow when a badge Circle is clicked", () => {
+        it("executes the microflow when a badge is clicked", () => {
             const onclickProps: OnClickProps = {
                 microflowProps: {
                     guid: "2",
@@ -56,7 +57,7 @@ describe("Badge", () => {
             };
             spyOn(window.mx.ui, "action").and.callThrough();
 
-            const badge = createBadge(badgeProps);
+            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
             badge.simulate("click");
 
             expect(window.mx.ui.action).toHaveBeenCalledWith(onclickProps.microflowProps.microflow, {
@@ -78,11 +79,10 @@ describe("Badge", () => {
             };
             spyOn(window.mx.ui, "error").and.callThrough();
 
-            const badge = createBadge(badgeProps);
-            const badgeComponent = badge.instance() as Badge;
-            badgeComponent.componentDidMount();
+            const badge = newBadgeInstance({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            badge.componentDidMount();
 
-            expect(window.mx.ui.error).toHaveBeenCalledWith("Error in configuration of the badge circle widget" +
+            expect(window.mx.ui.error).toHaveBeenCalledWith("Error in configuration of the Badge widget" +
                 "\n" + "'On click' call a microFlow is set and there is no 'Microflow' Selected in tab Events"
             );
         });
@@ -106,7 +106,7 @@ describe("Badge", () => {
 
             spyOn(window.mx.ui, "error").and.callThrough();
 
-            const badge = createBadge(badgeProps);
+            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
             badge.simulate("click");
 
             expect(window.mx.ui.error).toHaveBeenCalledWith(errorMessage);
@@ -114,7 +114,7 @@ describe("Badge", () => {
     });
 
     describe("with an onClick show page set", () => {
-        it("opens the page when a badge Circle is clicked", () => {
+        it("opens the page when a badge is clicked", () => {
             const onclickProps: OnClickProps = {
                 onClickType: "showPage",
                 pageProps: {
@@ -126,7 +126,7 @@ describe("Badge", () => {
             };
             spyOn(window.mx.ui, "openForm").and.callThrough();
 
-            const badge = createBadge(badgeProps);
+            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
             badge.simulate("click");
 
             expect(window.mx.ui.openForm).toHaveBeenCalledWith(onclickProps.pageProps.page, {
@@ -147,11 +147,10 @@ describe("Badge", () => {
             };
             spyOn(window.mx.ui, "error").and.callThrough();
 
-            const badge = createBadge(badgeProps);
-            const badgeComponent = badge.instance() as Badge;
-            badgeComponent.componentDidMount();
+            const badge = newBadgeInstance({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            badge.componentDidMount();
 
-            expect(window.mx.ui.error).toHaveBeenCalledWith("Error in configuration of the badge circle widget" +
+            expect(window.mx.ui.error).toHaveBeenCalledWith("Error in configuration of the Badge widget" +
                 "\n" + "'On click' Show a page is set and there is no 'Page' Selected in tab 'Events'"
             );
         });
@@ -172,7 +171,7 @@ describe("Badge", () => {
             spyOn(window.mx.ui, "openForm");
             spyOn(window.mx.ui, "action");
 
-            const badge = createBadge(badgeProps);
+            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
             badge.simulate("click");
 
             expect(window.mx.ui.error).not.toHaveBeenCalled();

@@ -39,6 +39,7 @@ class Badge extends WidgetBase {
    private updateRendering() {
        render(createElement(BadgeComponent, {
            badgeOnClick: this.createOnClickProps(),
+           badgeType: this.badgeType,
            badgeValue: this.getValue(this.valueAttribute, ""),
            disabled: this.contextObject ? undefined : "disabled",
            label: this.getValue(this.labelAttribute, this.label),
