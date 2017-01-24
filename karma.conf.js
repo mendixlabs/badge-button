@@ -12,7 +12,7 @@ Object.assign(webpackConfig, {
 });
 
 module.exports = function(config) {
-    if (config.instrumenter) {
+    if (config.codeCoverage) {
         Object.assign(webpackConfig, {
             module: Object.assign(webpackConfig.module, {
                 postLoaders: [ {
@@ -40,7 +40,7 @@ module.exports = function(config) {
         },
         webpack: webpackConfig,
         webpackServer: { noInfo: true },
-        reporters: [ "progress", config.instrumenter ? "coverage" : "kjhtml" ],
+        reporters: [ "progress", config.codeCoverage ? "coverage" : "kjhtml" ],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
