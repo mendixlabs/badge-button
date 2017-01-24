@@ -33,20 +33,12 @@ export class Badge extends Component<BadgeProps, {}> {
         label: "default",
         style: "default"
     };
+
     componentDidMount() {
         this.checkConfig();
-        this.setBadge();
-    }
-
-    componentDidUpdate() {
-        this.setBadge();
     }
 
     render() {
-        return this.setBadge();
-    }
-
-    private setBadge() {
         if (this.props.badgeType === "button") {
             return this.createBadgeButton();
         } else if (this.props.badgeType === "label") {
