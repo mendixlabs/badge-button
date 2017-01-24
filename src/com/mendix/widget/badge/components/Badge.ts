@@ -4,22 +4,18 @@ import * as classNames from "classnames";
 export type BadgeOnclick = "doNothing" | "showPage" | "callMicroflow";
 export type PageSettings = "content" | "popup" | "modal";
 
-export interface MicroflowProps {
-    microflow: string;
-    guid: string;
-}
-
-export interface PageProps {
-    page: string;
-    pageSetting: PageSettings;
-    entity: string;
-    guid: string;
-}
-
 export interface OnClickProps {
     onClickType: BadgeOnclick;
-    microflowProps?: MicroflowProps;
-    pageProps?: PageProps;
+    microflowProps?: {
+        microflow: string;
+        guid: string;
+    };
+    pageProps?: {
+        page: string;
+        pageSetting: PageSettings;
+        entity: string;
+        guid: string;
+    };
 }
 
 export interface BadgeProps {
@@ -34,7 +30,6 @@ export interface BadgeProps {
 export class Badge extends Component<BadgeProps, {}> {
     static defaultProps: BadgeProps = {
         badgeType: "badge",
-        badgeValue: "0",
         label: "default",
         style: "default"
     };
