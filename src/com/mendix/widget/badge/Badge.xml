@@ -37,9 +37,9 @@
             </enumerationValues>
         </property>
         <property key="styleAttribute" type="attribute" required="false">
-            <caption>Bootstrap Style</caption>
+            <caption>Bootstrap style</caption>
             <category>Data source</category>
-            <description>Value of attribute should be: info, warning, danger, success. Alternatively use the 'Class bar' property set styling</description>
+            <description>Value of attribute should be: info, warning, danger, success. Alternatively use the 'Class' property set Common category</description>
             <attributeTypes>
                 <attributeType name="Enum" />
                 <attributeType name="String" />
