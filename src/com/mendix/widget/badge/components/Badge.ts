@@ -1,4 +1,4 @@
-import { Component, DOM, createElement } from "react";
+import { Component, DOM, MouseEventHandler, createElement } from "react";
 import * as classNames from "classnames";
 
 export type BadgeOnclick = "doNothing" | "showPage" | "callMicroflow";
@@ -28,11 +28,14 @@ export interface BadgeProps {
 }
 
 export class Badge extends Component<BadgeProps, {}> {
-    static defaultProps: BadgeProps = {
-        badgeType: "badge",
-        label: "default",
-        style: "default"
-    };
+    static defaultProps: BadgeProps = { badgeType: "badge", label: "default", style: "default" };
+    private onClickEvent: MouseEventHandler<HTMLDivElement>;
+
+    constructor(props: BadgeProps) {
+        super(props);
+
+        this.onClickEvent = () => this.handleOnClick(this.props.badgeOnClick);
+    }
 
     componentDidMount() {
         this.checkConfig();
@@ -54,7 +57,7 @@ export class Badge extends Component<BadgeProps, {}> {
                 className: classNames("widget-badge-display",
                     { "widget-badge-link": !!this.props.badgeOnClick }
                 ),
-                onClick: () => this.handleOnClick(this.props.badgeOnClick)
+                onClick: this.onClickEvent
             },
             DOM.span({ className: "widget-badge-text" }, this.props.label),
             DOM.span({
@@ -72,7 +75,7 @@ export class Badge extends Component<BadgeProps, {}> {
                     { [`btn-${this.props.style}`]: !!this.props.style }
                 ),
                 disabled: this.props.disabled,
-                onClick: () => this.handleOnClick(this.props.badgeOnClick)
+                onClick: this.onClickEvent
             },
             DOM.span({ className: "widget-badge-text" }, this.props.label),
             DOM.span({ className: "badge" }, this.props.badgeValue)
@@ -85,7 +88,7 @@ export class Badge extends Component<BadgeProps, {}> {
                 className: classNames("widget-badge-display",
                     { "widget-badge-link": !!this.props.badgeOnClick }
                 ),
-                onClick: () => this.handleOnClick(this.props.badgeOnClick)
+                onClick: this.onClickEvent
             },
             DOM.span({ className: "widget-badge-text" }, this.props.label),
             DOM.span({
