@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Badge",
   "scripts": {
-    "test": "karma start --codeCoverage && node tests/remap.js"
+    "test": "karma start --single-run --codeCoverage && node tests/remap.js"
   },
   "repository": {
     "type": "git",
