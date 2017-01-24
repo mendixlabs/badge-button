@@ -1,8 +1,9 @@
 {
   "name": "badge",
   "version": "0.1.0",
-  "description": "Badge",
+  "description": "Badges are numerical indicators of how many items are associated with a link",
   "scripts": {
+    "pretest": "tsc",
     "test": "karma start --single-run --codeCoverage && node tests/remap.js"
   },
   "repository": {
@@ -45,20 +46,21 @@
     "karma-jasmine-html-reporter": "^0.2.2",
     "karma-remap-istanbul": "^0.2.1",
     "karma-sourcemap-loader": "^0.3.7",
+    "karma-typescript": "^2.0.9",
     "karma-webpack": "^1.8.0",
     "mendix-client": "git+https://github.com/FlockOfBirds/Mendix-client-typing.git",
     "react-addons-test-utils": "~15.3.2",
-    "remap-istanbul": "^0.6.4",
+    "remap-istanbul": "^0.7.0",
     "source-map-loader": "^0.1.5",
     "style-loader": "^0.13.1",
     "ts-loader": "^0.9.4",
     "tslint": "^4.0.2",
     "tslint-eslint-rules": "^2.1.0",
-    "typescript": "^2.0.3",
+    "typescript": "^2.0.10",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.2"
   },
-  "dependencies": {
+ "dependencies": {
     "classnames": "^2.2.5",
     "react": "~15.3.2",
     "react-dom": "~15.3.2"

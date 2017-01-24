@@ -1,5 +1,5 @@
-const path = require("path");
 var webpackConfig = require("./webpack.config");
+const path = require("path");
 Object.assign(webpackConfig, {
     debug: true,
     devtool: "inline-source-map",
@@ -12,7 +12,8 @@ Object.assign(webpackConfig, {
 });
 
 module.exports = function(config) {
-    if (config.codeCoverage) {
+    if(config.codeCoverage) {
+        console.log("With instrumenter for code coverage");
         Object.assign(webpackConfig, {
             module: Object.assign(webpackConfig.module, {
                 postLoaders: [ {
@@ -28,7 +29,6 @@ module.exports = function(config) {
     config.set({
         basePath: "",
         frameworks: [ "jasmine" ],
-
         files: [
             { pattern: "src/**/*.ts" },
             { pattern: "tests/**/*.ts" },
@@ -45,11 +45,11 @@ module.exports = function(config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
-        browsers: [ "Chrome" ],
+        browsers: [ "Chrome" ], 
         singleRun: false,
         concurrency: Infinity,
         coverageReporter: {
-            dir: "./dist/testresults",
+            dir: "./dist/testresults", 
             reporters: [
                 { type: "json", subdir: ".", file: "coverage.json" },
                 { type: "text" }

@@ -63,9 +63,7 @@ module.exports = function(grunt) {
         clean: {
             build: [
                 "./dist/" + pkg.version + "/" + pkg.name + "/*",
-                "./dist/src/**/*",
                 "./dist/tmp/**/*",
-                "./dist/testresults/**/*",
                 "./dist/MxTestProject/deployment/web/widgets/" + pkg.name + "/*",
                 "./dist/MxTestProject/widgets/" + pkg.name + ".mpk"
             ]
