@@ -1,8 +1,11 @@
-import { Component, DOM, MouseEventHandler, createElement } from "react";
+import { Component, DOM, MouseEventHandler, StatelessComponent , createElement } from "react";
 import * as classNames from "classnames";
 
 export type BadgeOnclick = "doNothing" | "showPage" | "callMicroflow";
 export type PageSettings = "content" | "popup" | "modal";
+
+export const ValidationAlert: StatelessComponent<{ message: string }> = (props) =>
+    DOM.div({ className: "alert alert-danger widget-validation-message" }, props.message);
 
 export interface OnClickProps {
     onClickType: BadgeOnclick;
@@ -27,7 +30,7 @@ export interface BadgeProps {
     disabled?: string;
 }
 
-export class Badge extends Component<BadgeProps, {}> {
+export class Badge extends Component<BadgeProps, { alertMessage: string }> {
     static defaultProps: BadgeProps = { badgeType: "badge", label: "default", style: "default" };
     private onClickEvent: MouseEventHandler<HTMLDivElement>;
 
@@ -35,6 +38,7 @@ export class Badge extends Component<BadgeProps, {}> {
         super(props);
 
         this.onClickEvent = () => this.handleOnClick(this.props.badgeOnClick);
+        this.state = { alertMessage: "" };
     }
 
     componentDidMount() {
@@ -64,7 +68,8 @@ export class Badge extends Component<BadgeProps, {}> {
                 className: classNames("widget-badge", "badge",
                     { [`label-${this.props.style}`]: !!this.props.style }
                 )
-            }, this.props.badgeValue)
+            }, this.props.badgeValue),
+            this.state.alertMessage ? createElement(ValidationAlert, { message: this.state.alertMessage }) : null
         );
     }
 
@@ -78,7 +83,8 @@ export class Badge extends Component<BadgeProps, {}> {
                 onClick: this.onClickEvent
             },
             DOM.span({ className: "widget-badge-text" }, this.props.label),
-            DOM.span({ className: "badge" }, this.props.badgeValue)
+            DOM.span({ className: "badge" }, this.props.badgeValue),
+            this.state.alertMessage ? createElement(ValidationAlert, { message: this.state.alertMessage }) : null
         );
     }
 
@@ -95,7 +101,8 @@ export class Badge extends Component<BadgeProps, {}> {
                 className: classNames("widget-badge", "label",
                     { [`label-${this.props.style}`]: !!this.props.style }
                 )
-            }, this.props.badgeValue)
+            }, this.props.badgeValue),
+            this.state.alertMessage ? createElement(ValidationAlert, { message: this.state.alertMessage }) : null
         );
     }
 
@@ -111,7 +118,7 @@ export class Badge extends Component<BadgeProps, {}> {
         }
         if (errorMessage.length > 0) {
             errorMessage.unshift("Error in configuration of the Badge widget");
-            window.mx.ui.error(errorMessage.join("\n"));
+            this.setState({ alertMessage: errorMessage.join("\n") });
         }
     }
 
@@ -119,9 +126,9 @@ export class Badge extends Component<BadgeProps, {}> {
         if (props.onClickType === "callMicroflow" && props.microflowProps.microflow && props.microflowProps.guid) {
             window.mx.ui.action(props.microflowProps.microflow, {
                 error: (error) => {
-                    window.mx.ui.error(
+                    this.setState({ alertMessage:
                         `Error while executing microflow: ${props.microflowProps.microflow}: ${error.message}`
-                    );
+                    });
                 },
                 params: {
                     applyto: "selection",

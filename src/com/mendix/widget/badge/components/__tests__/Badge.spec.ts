@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import { DOM, createElement } from "react";
 
-import { Badge, BadgeProps, OnClickProps } from "../Badge";
+import { Badge, BadgeProps, OnClickProps, ValidationAlert } from "../Badge";
 
 import { MockContext, mockMendix } from "tests/mocks/Mendix";
 
@@ -38,7 +38,7 @@ describe("Badge", () => {
         );
     });
 
-    it("with style 'success' should have class 'widget-badge badge label-success'", () => {
+    it("should render with style 'success'", () => {
         badgeProps.style = "success";
 
         const badgeComponent = createBadge(badgeProps);
@@ -46,7 +46,7 @@ describe("Badge", () => {
         expect(badgeComponent.childAt(1).hasClass("widget-badge badge label-success")).toBe(true);
     });
 
-    describe("with an onClick microflow set", () => {
+    describe("with an on click microflow set", () => {
         it("executes the microflow when a badge is clicked", () => {
             const onclickProps: OnClickProps = {
                 microflowProps: {
@@ -69,7 +69,7 @@ describe("Badge", () => {
             });
         });
 
-        it("microflow selected it shows an error in configuration", () => {
+        it("shows an error in configuration", () => {
             const onclickProps: OnClickProps = {
                 microflowProps: {
                     guid: "2",
@@ -77,17 +77,17 @@ describe("Badge", () => {
                 },
                 onClickType: "callMicroflow"
             };
-            spyOn(window.mx.ui, "error").and.callThrough();
 
-            const badge = newBadgeInstance({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
-            badge.componentDidMount();
+            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            const badgeComponent = badge.instance() as Badge;
+            badgeComponent.componentDidMount();
 
-            expect(window.mx.ui.error).toHaveBeenCalledWith("Error in configuration of the Badge widget" +
-                "\n" + "'On click' call a microFlow is set and there is no 'Microflow' Selected in tab Events"
-            );
+            const validationAlert = badge.find(ValidationAlert);
+            expect(validationAlert.props().message).toBe("Error in configuration of the Badge widget" +
+                "\n" + "'On click' call a microFlow is set and there is no 'Microflow' Selected in tab Events");
         });
 
-        it("invalid microflow shows an error when a badge circle is clicked", () => {
+        it(" and has invalid microflow shows an error when a badge is clicked", () => {
             const invalidAction = "invalid_action";
             const errorMessage = "Error while executing microflow: invalid_action: mx.ui.action error mock";
             const onclickProps: OnClickProps = {
@@ -104,17 +104,16 @@ describe("Badge", () => {
                 }
             });
 
-            spyOn(window.mx.ui, "error").and.callThrough();
-
             const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
             badge.simulate("click");
 
-            expect(window.mx.ui.error).toHaveBeenCalledWith(errorMessage);
+            const validationAlert = badge.find(ValidationAlert);
+            expect(validationAlert.props().message).toBe(errorMessage);
         });
     });
 
-    describe("with an onClick show page set", () => {
-        it("opens the page when a badge is clicked", () => {
+    describe("with an on click show page configured", () => {
+        it("opens a page", () => {
             const onclickProps: OnClickProps = {
                 onClickType: "showPage",
                 pageProps: {
@@ -135,24 +134,23 @@ describe("Badge", () => {
             });
         });
 
-        it("without a page selected it shows an error in configuration", () => {
+        it("without a page shows an error", () => {
             const onclickProps: OnClickProps = {
                 onClickType: "showPage",
                 pageProps: {
-                    entity: "",
+                    entity: "TestSuite.badge",
                     guid: "2",
                     page: "",
                     pageSetting: "popup"
                 }
             };
-            spyOn(window.mx.ui, "error").and.callThrough();
+            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            const badgeComponent = badge.instance() as Badge;
+            badgeComponent.componentDidMount();
 
-            const badge = newBadgeInstance({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
-            badge.componentDidMount();
-
-            expect(window.mx.ui.error).toHaveBeenCalledWith("Error in configuration of the Badge widget" +
-                "\n" + "'On click' Show a page is set and there is no 'Page' Selected in tab 'Events'"
-            );
+            const validationAlert = badge.find(ValidationAlert);
+            expect(validationAlert.props().message).toBe("Error in configuration of the Badge widget" +
+                "\n" + "'On click' Show a page is set and there is no 'Page' Selected in tab 'Events'");
         });
     });
 
@@ -179,5 +177,4 @@ describe("Badge", () => {
             expect(window.mx.ui.action).not.toHaveBeenCalled();
         });
     });
-
 });
