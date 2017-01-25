@@ -7,26 +7,24 @@ export type PageSettings = "content" | "popup" | "modal";
 export const ValidationAlert: StatelessComponent<{ message: string }> = (props) =>
     DOM.div({ className: "alert alert-danger widget-validation-message" }, props.message);
 
-export interface OnClickProps {
-    onClickType: BadgeOnclick;
-    microflowProps?: {
-        microflow: string;
-        guid: string;
-    } | any;
-    pageProps?: {
-        page: string;
-        pageSetting: PageSettings;
-        entity: string;
-        guid: string;
-    } | any;
-}
-
 export interface BadgeProps {
     label?: string;
     badgeType: string;
     badgeValue?: string;
     style?: string;
-    badgeOnClick?: OnClickProps | any;
+    microflow?: {
+        onClickType: BadgeOnclick;
+        microflowProps?: {
+            name: string;
+            guid: string;
+        };
+        pageProps?: {
+            page: string;
+            pageSetting: PageSettings;
+            entity: string;
+            guid: string;
+        };
+    } | any;
     disabled?: string;
 }
 
@@ -37,7 +35,7 @@ export class Badge extends Component<BadgeProps, { alertMessage: string }> {
     constructor(props: BadgeProps) {
         super(props);
 
-        this.onClickEvent = () => this.handleOnClick(this.props.badgeOnClick);
+        this.onClickEvent = () => this.handleOnClick(this.props);
         this.state = { alertMessage: "" };
     }
 
@@ -59,7 +57,7 @@ export class Badge extends Component<BadgeProps, { alertMessage: string }> {
         return createElement("div",
             {
                 className: classNames("widget-badge-display",
-                    { "widget-badge-link": !!this.props.badgeOnClick }
+                    { "widget-badge-link": !!this.props.microflow }
                 ),
                 onClick: this.onClickEvent
             },
@@ -92,7 +90,7 @@ export class Badge extends Component<BadgeProps, { alertMessage: string }> {
         return createElement("div",
             {
                 className: classNames("widget-badge-display",
-                    { "widget-badge-link": !!this.props.badgeOnClick }
+                    { "widget-badge-link": !!this.props.microflow }
                 ),
                 onClick: this.onClickEvent
             },
@@ -108,12 +106,12 @@ export class Badge extends Component<BadgeProps, { alertMessage: string }> {
 
     private checkConfig() {
         const errorMessage: string[] = [];
-        if (this.props.badgeOnClick.onClickType === "callMicroflow"
-            && !this.props.badgeOnClick.microflowProps.microflow) {
+        if (this.props.microflow.onClickType === "callMicroflow"
+            && !this.props.microflow.microflowProps.name) {
             errorMessage.push("'On click' call a microFlow is set " +
                 "and there is no 'Microflow' Selected in tab Events");
         }
-        if (this.props.badgeOnClick.onClickType === "showPage" && !this.props.badgeOnClick.pageProps.page) {
+        if (this.props.microflow.onClickType === "showPage" && !this.props.microflow.pageProps.page) {
             errorMessage.push("'On click' Show a page is set and there is no 'Page' Selected in tab 'Events'");
         }
         if (errorMessage.length > 0) {
@@ -122,27 +120,30 @@ export class Badge extends Component<BadgeProps, { alertMessage: string }> {
         }
     }
 
-    private handleOnClick(props: OnClickProps) {
-        if (props.onClickType === "callMicroflow" && props.microflowProps.microflow && props.microflowProps.guid) {
-            window.mx.ui.action(props.microflowProps.microflow, {
+    private handleOnClick(props: BadgeProps) {
+        if (props.microflow.onClickType === "callMicroflow"
+            && props.microflow.microflowProps.name && props.microflow.microflowProps.guid) {
+            window.mx.ui.action(props.microflow.microflowProps.name, {
                 error: (error) => {
-                    this.setState({ alertMessage:
-                        `Error while executing microflow: ${props.microflowProps.microflow}: ${error.message}`
+                    this.setState({
+                        alertMessage:
+                        `Error while executing microflow: ${props.microflow.microflowProps.name}: ${error.message}`
                     });
                 },
                 params: {
                     applyto: "selection",
-                    guids: [ props.microflowProps.guid ]
+                    guids: [ props.microflow.microflowProps.guid ]
                 }
             });
-        } else if (props.onClickType === "showPage" && props.pageProps.page && props.pageProps.guid) {
+        } else if (props.microflow.onClickType === "showPage"
+            && props.microflow.pageProps.page && props.microflow.pageProps.guid) {
             const context = new mendix.lib.MxContext();
-            context.setTrackId(props.pageProps.guid);
-            context.setTrackEntity(props.pageProps.entity);
+            context.setTrackId(props.microflow.pageProps.guid);
+            context.setTrackEntity(props.microflow.pageProps.entity);
 
-            window.mx.ui.openForm(props.pageProps.page, {
+            window.mx.ui.openForm(props.microflow.pageProps.page, {
                 context,
-                location: props.pageProps.pageSetting
+                location: props.microflow.pageProps.pageSetting
             });
         }
     }

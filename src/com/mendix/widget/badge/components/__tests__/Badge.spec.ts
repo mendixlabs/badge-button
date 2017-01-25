@@ -2,30 +2,29 @@ import { shallow } from "enzyme";
 import { DOM, createElement } from "react";
 import * as classNames from "classnames";
 
-import { Badge, BadgeProps, OnClickProps, ValidationAlert } from "../Badge";
+import { Badge, BadgeProps, ValidationAlert } from "../Badge";
 
 import { MockContext, mockMendix } from "tests/mocks/Mendix";
 
 describe("Badge", () => {
-    let badgeProps: BadgeProps;
     const createBadge = (props: BadgeProps) => shallow(createElement(Badge, props));
     const newBadgeInstance = (props: BadgeProps) => createBadge(props).instance() as Badge;
-    const clickProps: OnClickProps = { onClickType: "doNothing" };
 
     beforeEach(() => {
-        badgeProps = {
-            badgeOnClick: clickProps,
-            badgeType: "badge",
-            badgeValue: "0",
-            label: "default",
-            style: "default"
-        };
         window.mx = mockMendix;
         window.mendix = { lib: { MxContext: MockContext } };
     });
 
     describe("should render the structure", () => {
         it("for badge", () => {
+            const badgeProps: BadgeProps = {
+                microflow: { onClickType: "doNothing" },
+                badgeType: "badge",
+                badgeValue: "0",
+                label: "default",
+                style: "default"
+            };
+
             const badgeComponent = createBadge(badgeProps);
 
             expect(badgeComponent).toBeElement(
@@ -41,8 +40,14 @@ describe("Badge", () => {
         });
 
         it("for button", () => {
-            badgeProps.badgeType = "button";
-            badgeProps.disabled = "false";
+            const badgeProps: BadgeProps = {
+                microflow: { onClickType: "doNothing" },
+                badgeType: "button",
+                badgeValue: "0",
+                disabled: "false",
+                label: "default",
+                style: "default"
+            };
 
             const badgeComponent = createBadge(badgeProps);
 
@@ -62,7 +67,14 @@ describe("Badge", () => {
         });
 
         it("for label", () => {
-            badgeProps.badgeType = "label";
+            const badgeProps: BadgeProps = {
+                microflow: { onClickType: "doNothing" },
+                badgeType: "label",
+                badgeValue: "0",
+                disabled: "false",
+                label: "default",
+                style: "default"
+            };
 
             const badgeComponent = createBadge(badgeProps);
 
@@ -70,7 +82,7 @@ describe("Badge", () => {
                 createElement("div",
                     {
                         className: classNames("widget-badge-display",
-                            { "widget-badge-link": !!badgeProps.badgeOnClick }
+                            { "widget-badge-link": !!badgeProps.microflow }
                         ),
                         onClick: jasmine.any(Function) as any
                     },
@@ -95,7 +107,11 @@ describe("Badge", () => {
     });
 
     it("should render with style 'success'", () => {
-        badgeProps.style = "success";
+        const badgeProps: BadgeProps = {
+            microflow: { onClickType: "doNothing" },
+            badgeType: "badge",
+            style: "success"
+        };
 
         const badgeComponent = createBadge(badgeProps);
 
@@ -104,37 +120,45 @@ describe("Badge", () => {
 
     describe("with an on click microflow set", () => {
         it("executes the microflow when a badge is clicked", () => {
-            const onclickProps: OnClickProps = {
-                microflowProps: {
-                    guid: "2",
-                    microflow: "IVK_Onclick"
+            const badgeProps: BadgeProps = {
+                microflow: {
+                    microflowProps: {
+                        guid: "2",
+                        name: "IVK_Onclick"
+                    },
+                    onClickType: "callMicroflow"
                 },
-                onClickType: "callMicroflow"
+                badgeType: "label",
+                style: "success"
             };
             spyOn(window.mx.ui, "action").and.callThrough();
 
-            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            const badge = createBadge(badgeProps);
             badge.simulate("click");
 
-            expect(window.mx.ui.action).toHaveBeenCalledWith(onclickProps.microflowProps.microflow, {
+            expect(window.mx.ui.action).toHaveBeenCalledWith(badgeProps.microflow.microflowProps.name, {
                 error: jasmine.any(Function),
                 params: {
                     applyto: "selection",
-                    guids: [ onclickProps.microflowProps.guid ]
+                    guids: [ badgeProps.microflow.microflowProps.guid ]
                 }
             });
         });
 
         it("shows an error in configuration", () => {
-            const onclickProps: OnClickProps = {
-                microflowProps: {
-                    guid: "2",
-                    microflow: ""
+            const badgeProps: BadgeProps = {
+                microflow: {
+                    microflowProps: {
+                        guid: "2",
+                        name: ""
+                    },
+                    onClickType: "callMicroflow"
                 },
-                onClickType: "callMicroflow"
+                badgeType: "label",
+                style: "success"
             };
 
-            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            const badge = createBadge(badgeProps);
             const badgeComponent = badge.instance() as Badge;
             badgeComponent.componentDidMount();
 
@@ -146,12 +170,16 @@ describe("Badge", () => {
         it(" and has invalid microflow shows an error when a badge is clicked", () => {
             const invalidAction = "invalid_action";
             const errorMessage = "Error while executing microflow: invalid_action: mx.ui.action error mock";
-            const onclickProps: OnClickProps = {
-                microflowProps: {
-                    guid: "2",
-                    microflow: "invalid_action"
+            const badgeProps: BadgeProps = {
+                microflow: {
+                    microflowProps: {
+                        guid: "2",
+                        name: invalidAction
+                    },
+                    onClickType: "callMicroflow"
                 },
-                onClickType: "callMicroflow"
+                badgeType: "label",
+                style: "success"
             };
 
             spyOn(window.mx.ui, "action").and.callFake((actionname: string, action: { error: (e: Error) => void }) => {
@@ -160,7 +188,7 @@ describe("Badge", () => {
                 }
             });
 
-            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            const badge = createBadge(badgeProps);
             badge.simulate("click");
 
             const validationAlert = badge.find(ValidationAlert);
@@ -170,37 +198,45 @@ describe("Badge", () => {
 
     describe("with an on click show page configured", () => {
         it("opens a page", () => {
-            const onclickProps: OnClickProps = {
-                onClickType: "showPage",
-                pageProps: {
-                    entity: "TestSuite.badge",
-                    guid: "2",
-                    page: "showpage.xml",
-                    pageSetting: "popup"
-                }
+            const badgeProps: BadgeProps = {
+                microflow: {
+                    onClickType: "showPage",
+                    pageProps: {
+                        entity: "TestSuite.badge",
+                        guid: "2",
+                        page: "showpage.xml",
+                        pageSetting: "popup"
+                    }
+                },
+                badgeType: "label",
+                style: "success"
             };
             spyOn(window.mx.ui, "openForm").and.callThrough();
 
-            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            const badge = createBadge(badgeProps);
             badge.simulate("click");
 
-            expect(window.mx.ui.openForm).toHaveBeenCalledWith(onclickProps.pageProps.page, {
+            expect(window.mx.ui.openForm).toHaveBeenCalledWith(badgeProps.microflow.pageProps.page, {
                 context: new mendix.lib.MxContext(),
                 location: "popup"
             });
         });
 
         it("without a page shows an error", () => {
-            const onclickProps: OnClickProps = {
-                onClickType: "showPage",
-                pageProps: {
-                    entity: "TestSuite.badge",
-                    guid: "2",
-                    page: "",
-                    pageSetting: "popup"
-                }
+            const badgeProps: BadgeProps = {
+                microflow: {
+                    onClickType: "showPage",
+                    pageProps: {
+                        entity: "TestSuite.badge",
+                        guid: "2",
+                        page: "",
+                        pageSetting: "popup"
+                    }
+                },
+                badgeType: "label",
+                style: "success"
             };
-            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            const badge = createBadge(badgeProps);
             const badgeComponent = badge.instance() as Badge;
             badgeComponent.componentDidMount();
 
@@ -212,20 +248,24 @@ describe("Badge", () => {
 
     describe("without a on click", () => {
         it("should not respond on user click", () => {
-            const onclickProps: OnClickProps = {
-                onClickType: "showPage",
-                pageProps: {
-                    entity: "",
-                    guid: "2",
-                    page: "",
-                    pageSetting: "popup"
-                }
+            const badgeProps: BadgeProps = {
+                microflow: {
+                    onClickType: "showPage",
+                    pageProps: {
+                        entity: "",
+                        guid: "2",
+                        page: "",
+                        pageSetting: "popup"
+                    }
+                },
+                badgeType: "label",
+                style: "success"
             };
             spyOn(window.mx.ui, "error");
             spyOn(window.mx.ui, "openForm");
             spyOn(window.mx.ui, "action");
 
-            const badge = createBadge({ badgeOnClick: onclickProps, badgeType: "badge", badgeValue: "New" });
+            const badge = createBadge(badgeProps);
             badge.simulate("click");
 
             expect(window.mx.ui.error).not.toHaveBeenCalled();

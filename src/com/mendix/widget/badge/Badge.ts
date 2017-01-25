@@ -4,7 +4,7 @@ import * as WidgetBase from "mxui/widget/_WidgetBase";
 import { createElement } from "react";
 import { render } from "react-dom";
 
-import { Badge as BadgeComponent, BadgeOnclick, OnClickProps, PageSettings } from "./components/Badge";
+import { Badge as BadgeComponent, BadgeOnclick, PageSettings } from "./components/Badge";
 
 class Badge extends WidgetBase {
     // Attributes from modeler
@@ -38,7 +38,19 @@ class Badge extends WidgetBase {
 
    private updateRendering() {
        render(createElement(BadgeComponent, {
-           badgeOnClick: this.createOnClickProps(),
+           microflow: {
+               microflowProps: {
+                   guid: this.contextObject ? this.contextObject.getGuid() : undefined,
+                   name: this.microflow
+               },
+               onClickType: this.onClickEvent,
+               pageProps: {
+                   entity: this.contextObject ? this.contextObject.getEntity() : undefined,
+                   guid: this.contextObject ? this.contextObject.getGuid() : undefined,
+                   page: this.page,
+                   pageSetting: this.pageSettings
+               }
+           },
            badgeType: this.badgeType,
            badgeValue: this.getValue(this.valueAttribute, ""),
            disabled: this.contextObject ? undefined : "disabled",
@@ -52,22 +64,6 @@ class Badge extends WidgetBase {
             return this.contextObject.get(attributeName) as string || defaultValue;
         }
         return defaultValue;
-    }
-
-     private createOnClickProps(): OnClickProps {
-        return ({
-            microflowProps: {
-                guid: this.contextObject ? this.contextObject.getGuid() : undefined,
-                microflow: this.microflow
-            },
-            onClickType: this.onClickEvent,
-            pageProps: {
-                entity: this.contextObject ? this.contextObject.getEntity() : undefined,
-                guid: this.contextObject ? this.contextObject.getGuid() : undefined,
-                page: this.page,
-                pageSetting: this.pageSettings
-            }
-        });
     }
 
     private resetSubscriptions() {
