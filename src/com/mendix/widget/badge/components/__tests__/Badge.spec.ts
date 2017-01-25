@@ -83,6 +83,15 @@ describe("Badge", () => {
                 )
             );
         });
+
+        it("for validation alert", () => {
+            const message = "This is an error";
+            const validationAlert = shallow(createElement(ValidationAlert, { message }));
+
+            expect(validationAlert).toBeElement(
+                DOM.div({ className: "alert alert-danger widget-validation-message" }, message)
+            );
+        });
     });
 
     it("should render with style 'success'", () => {
