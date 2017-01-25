@@ -1,5 +1,6 @@
 import { shallow } from "enzyme";
 import { DOM, createElement } from "react";
+import * as classNames from "classnames";
 
 import { Badge, BadgeProps, OnClickProps, ValidationAlert } from "../Badge";
 
@@ -23,19 +24,65 @@ describe("Badge", () => {
         window.mendix = { lib: { MxContext: MockContext } };
     });
 
-    it("should render the structure", () => {
-        const badgeComponent = createBadge(badgeProps);
+    describe("should render the structure", () => {
+        it("for badge", () => {
+            const badgeComponent = createBadge(badgeProps);
 
-        expect(badgeComponent).toBeElement(
-            DOM.div(
-                {
-                    className: "widget-badge-display widget-badge-link",
-                    onClick: jasmine.any(Function) as any
-                },
-                DOM.span({ className: "widget-badge-text" }, badgeProps.label),
-                DOM.span({ className: "widget-badge badge label-default" }, badgeProps.badgeValue)
-            )
-        );
+            expect(badgeComponent).toBeElement(
+                DOM.div(
+                    {
+                        className: "widget-badge-display widget-badge-link",
+                        onClick: jasmine.any(Function) as any
+                    },
+                    DOM.span({ className: "widget-badge-text" }, badgeProps.label),
+                    DOM.span({ className: "widget-badge badge label-default" }, badgeProps.badgeValue)
+                )
+            );
+        });
+
+        it("for button", () => {
+            badgeProps.badgeType = "button";
+            badgeProps.disabled = "false";
+
+            const badgeComponent = createBadge(badgeProps);
+
+            expect(badgeComponent).toBeElement(
+                createElement("button",
+                    {
+                        className: classNames("widget-badge btn",
+                            { [`btn-${badgeProps.style}`]: !!badgeProps.style }
+                        ),
+                        disabled: "false",
+                        onClick: jasmine.any(Function) as any
+                    },
+                    DOM.span({ className: "widget-badge-text" }, badgeProps.label),
+                    DOM.span({ className: "badge" }, badgeProps.badgeValue)
+                )
+            );
+        });
+
+        it("for label", () => {
+            badgeProps.badgeType = "label";
+
+            const badgeComponent = createBadge(badgeProps);
+
+            expect(badgeComponent).toBeElement(
+                createElement("div",
+                    {
+                        className: classNames("widget-badge-display",
+                            { "widget-badge-link": !!badgeProps.badgeOnClick }
+                        ),
+                        onClick: jasmine.any(Function) as any
+                    },
+                    DOM.span({ className: "widget-badge-text" }, badgeProps.label),
+                    DOM.span({
+                        className: classNames("widget-badge", "label",
+                            { [`label-${badgeProps.style}`]: !!badgeProps.style }
+                        )
+                    }, badgeProps.badgeValue)
+                )
+            );
+        });
     });
 
     it("should render with style 'success'", () => {
