@@ -12,13 +12,13 @@ export interface OnClickProps {
     microflowProps?: {
         microflow: string;
         guid: string;
-    };
+    } | any;
     pageProps?: {
         page: string;
         pageSetting: PageSettings;
         entity: string;
         guid: string;
-    };
+    } | any;
 }
 
 export interface BadgeProps {
@@ -26,7 +26,7 @@ export interface BadgeProps {
     badgeType: string;
     badgeValue?: string;
     style?: string;
-    badgeOnClick?: OnClickProps;
+    badgeOnClick?: OnClickProps | any;
     disabled?: string;
 }
 

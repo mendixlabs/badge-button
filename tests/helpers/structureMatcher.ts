@@ -19,13 +19,13 @@ export function findDifference(expected: ElementStructure | ElementStructure[], 
     if (isJasmineAny(expected)) {
         return !expected.asymmetricMatch(actual)
             ? `Expected something matching ${toString(expected)}, but got ${toString(actual)}`
-            : null;
+            : "";
     }
 
     if (typeof expected === "string" || typeof actual === "string" || expected == null || actual == null) {
         return actual !== expected
             ? `Expected ${toString(expected)}, but got ${toString(actual)}`
-            : null;
+            : "";
     }
 
     const expectedJson = expected as ElementJson;
@@ -50,7 +50,7 @@ export function findDifference(expected: ElementStructure | ElementStructure[], 
 
     return strict ? strictCompareChildren() : compareChildren();
 
-    function compareProp(prop: string) {
+    function compareProp(prop: string): string {
         const expectedVal = expectedJson.props[prop];
         if (!(prop in actualJson.props)) {
             return `${msgPrefix} property ${prop}`;
@@ -59,66 +59,73 @@ export function findDifference(expected: ElementStructure | ElementStructure[], 
 
         if (isJasmineAny(expectedVal)) {
             if (!expectedVal.asymmetricMatch(actualVal)) {
-                return `${msgPrefix} property ${prop} to match ${ expectedVal.jasmineToString() } `
-                    + `but it was '${ jasmine.pp(actualVal) }'`;
+                return `${msgPrefix} property ${prop} to match ${expectedVal.jasmineToString()} `
+                    + `but it was '${jasmine.pp(actualVal)}'`;
             }
         } else if (prop === "className") {
             const difference = compareClasses(expectedVal, actualVal);
             if (difference) return difference;
         } else if (!jasmine.matchersUtil.equals(expectedVal, actualVal)) {
-            return `${ msgPrefix } property ${ prop } to equal '${jasmine.pp(expectedVal) }' `
+            return `${msgPrefix} property ${prop} to equal '${jasmine.pp(expectedVal)}' `
                 + `but it was '${jasmine.pp(actualVal)}'`;
         }
-        return null;
+        return "";
     }
 
-    function compareClasses(expectedClassName: string, actualClassName: string) {
+    function compareClasses(expectedClassName: string, actualClassName: string): string {
         const expectedClasses = (expectedClassName || "").trim().split(/\s+/);
         const actualClasses = (actualClassName || "").trim().split(/\s+/);
 
         const missingClasses = expectedClasses.filter(c => actualClasses.indexOf(c) === -1);
+        const superfluousClasses = actualClasses.filter(c => expectedClasses.indexOf(c) === -1);
 
         if (missingClasses.length) {
-            return `${ msgPrefix } classes ${ missingClasses.join(", ") }`;
+            return `${msgPrefix} classes ${missingClasses.join(", ")}`;
         }
-        return null;
+        if (strict && superfluousClasses.length) {
+            return `${msgPrefix} classes ${expectedClassName} but not ${superfluousClasses.join(", ")}`;
+        }
+        return "";
     }
 
-    function strictCompareChildren() {
+    function strictCompareChildren(): string {
         for (let i = 0; i < expectedJson.children.length; ++i) {
             const childDiff = findDifference(expectedJson.children[i], actualJson.children[i], true);
             if (childDiff != null) {
                 return actualJson.children.length !== expectedJson.children.length
-                    ? `${ msgPrefix } child ${ toString(expectedJson.children[i]) }, but it has only ${ actualJson.children.map(toString) }`
+                    ? `${msgPrefix} child ${toString(expectedJson.children[i])}, but it has only ${actualJson.children.map(toString)}`
                     : childDiff;
             }
         }
         if (actualJson.children.length > expectedJson.children.length) {
-            return `${ msgPrefix } exactly ${ expectedJson.children.length } children, `
+            return `${msgPrefix} exactly ${expectedJson.children.length} children, `
                 + `but it has ${actualJson.children.length}. The first extra child is:\n`
                 + toString(actualJson.children[expectedJson.children.length]);
         }
-        return null;
+        return "";
     }
 
-    function compareChildren() {
+    function compareChildren(): string {
         let actualIndex = 0;
         for (let expectedIndex = 0; expectedIndex < expectedJson.children.length; ++expectedIndex) {
             const expectedChild = expectedJson.children[expectedIndex];
-            for (; actualIndex < actualJson.children.length; actualIndex++) {
-                if (findDifference(expectedChild, actualJson.children[actualIndex], false) == null) break;
+            let found = false;
+            for (; !found && actualIndex < actualJson.children.length; actualIndex++) {
+                if (findDifference(expectedChild, actualJson.children[actualIndex], false) == null) {
+                    found = true;
+                }
             }
-            if (actualIndex === actualJson.children.length) {
-                return `${ msgPrefix } a child like ${ toString(expectedChild) } `
-                    + `but it is missing in ${ actualJson.children.map(toString).join(", ") }`;
+            if (!found && actualIndex === actualJson.children.length) {
+                return `${msgPrefix} a child like ${toString(expectedChild)} `
+                    + `but it is missing in ${actualJson.children.map(toString).join(", ")}`;
             }
         }
-        return null;
+        return "";
     }
 
     function toString(structure: ElementStructure | ElementStructure[]): string {
         if (isJasmineAny(structure)) return structure.jasmineToString();
-        if (typeof structure === "string" || structure == null) return `text '${ structure }'`;
+        if (typeof structure === "string" || structure == null) return `text '${structure}'`;
         if (Array.isArray(structure)) return "[" + structure.map(toString).join(", ") + "]";
         const json = structure as ElementJson;
         return "element " + json.type + ("className" in json.props ? "." + json.props["className"].trim().replace(/\s+/g, ".") : "");
@@ -126,23 +133,23 @@ export function findDifference(expected: ElementStructure | ElementStructure[], 
 }
 
 export function toElementStructure(node: any): ElementStructure | ElementStructure[] {
-    if (node == null) return null;
+    if (node == null) return "";
     if (typeof node === "object" && "nodes" in node) node = node.nodes.length > 1 ? node.nodes : node.nodes[0];
 
     if (Array.isArray(node)) return node.map(n => toElementStructure(n) as ElementStructure);
     if (node instanceof HTMLElement) return domToStructure(node);
     return reactToStructure(node as ReactChild | jasmine.Any);
 
-    function domToStructure(domNode: HTMLElement): ElementStructure {
+    function domToStructure(domNode: HTMLElement): ElementStructure{
         const type = domNode.nodeName.toLowerCase();
         if (type === "#text") {
-            return domNode.nodeValue;
+            return domNode.nodeValue || "";
         }
 
         const props: { [name: string]: string } = {};
         from(domNode.attributes || [])
             .filter(attr => attr.nodeName.indexOf("data-react") === -1)
-            .forEach(attr => props[attr.nodeName] = attr.nodeValue);
+            .forEach(attr => props[attr.nodeName] = attr.nodeValue || "");
         if ("class" in props) {
             props["className"] = props["class"];
             delete props["class"];
@@ -156,7 +163,7 @@ export function toElementStructure(node: any): ElementStructure | ElementStructu
     }
 
     function reactToStructure(child: ReactChild | jasmine.Any): ElementStructure {
-        if (child == null) return null;
+        if (child == null) return "";
         if (typeof child === "string" || typeof child === "number" || typeof child === "boolean") return child.toString();
         if (isJasmineAny(child)) return child; // todo: disallow Any inside createElement
         if (isValidElement(child)) return elemToStructure(child);
@@ -169,7 +176,7 @@ export function toElementStructure(node: any): ElementStructure | ElementStructu
 
         const props = assign({}, reactNode.props);
 
-        const children: ReactChild[] = Array.isArray(props.children) ? props.children : (props.children ? [props.children] : []);
+        const children: ReactChild[] = Array.isArray(props.children) ? props.children : (props.children ? [ props.children ] : []);
         delete props.children;
 
         for (let propName in props) {

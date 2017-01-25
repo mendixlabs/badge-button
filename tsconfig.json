@@ -21,8 +21,8 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false
+    "skipLibCheck": false,
+    "strictNullChecks": true
   },
   "exclude": [
       "node_modules/",
