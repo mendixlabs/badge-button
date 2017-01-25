@@ -1,12 +1,11 @@
 "use strict";
 var webpackConfig = require("./webpack.config");
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     var pkg = grunt.file.readJSON("package.json");
     grunt.initConfig({
         pkgName: pkg.name,
         name: pkg.name,
-
         watch: {
             updateWidgetFiles: {
                 "files": [ "./dist/tmp/src/**/*" ],
@@ -51,7 +50,7 @@ module.exports = function(grunt) {
             },
             source: {
                 files: [
-                    { dest: "./dist/tmp/src", cwd: "./src/", src: [ "**/*", "!**/*.ts" ], expand: true }
+                    { dest: "./dist/tmp/src", cwd: "./src/", src: [ "**/*", "!**/*.ts", "!**/*.css" ], expand: true }
                 ]
             }
         },
@@ -63,10 +62,16 @@ module.exports = function(grunt) {
         clean: {
             build: [
                 "./dist/" + pkg.version + "/" + pkg.name + "/*",
-                "./dist/tmp/**/*",
+                "./dist/src/**/*",
+                "./dist/tsc/**/*",
+                "./dist/testresults/**/*",
                 "./dist/MxTestProject/deployment/web/widgets/" + pkg.name + "/*",
                 "./dist/MxTestProject/widgets/" + pkg.name + ".mpk"
             ]
+        },
+
+        checkDependencies: {
+            this: {},
         }
     });
 
@@ -74,13 +79,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-copy");
+    grunt.loadNpmTasks("grunt-check-dependencies");
     grunt.loadNpmTasks("grunt-webpack");
 
-    grunt.registerTask("default", [ "clean build", "watch" ]);
+    grunt.registerTask("default", ["clean build", "watch" ]);
     grunt.registerTask(
         "clean build",
         "Compiles all the assets and copies the files to the build directory.",
-        [ "clean:build", "webpack", "compress:dist", "copy:mpk" ]
+        [ "checkDependencies", "clean:build", "webpack" , "compress:dist", "copy:mpk" ]
     );
     grunt.registerTask("build", [ "clean build" ]);
 };
