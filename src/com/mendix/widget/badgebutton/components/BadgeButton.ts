@@ -1,19 +1,18 @@
 import { Component, DOM, MouseEventHandler, StatelessComponent , createElement } from "react";
 import * as classNames from "classnames";
 
-export type BadgeOnclick = "doNothing" | "showPage" | "callMicroflow";
+export type BadgeButtonOnclick = "doNothing" | "showPage" | "callMicroflow";
 export type PageSettings = "content" | "popup" | "modal";
 
 export const ValidationAlert: StatelessComponent<{ message: string }> = (props) =>
     DOM.div({ className: "alert alert-danger widget-validation-message" }, props.message);
 
-export interface BadgeProps {
+export interface BadgeButtonProps {
     label?: string;
-    badgeType: string;
     badgeValue?: string;
     style?: string;
     microflow?: {
-        onClickType: BadgeOnclick;
+        onClickType: BadgeButtonOnclick;
         microflowProps?: {
             name: string;
             guid: string;
@@ -28,11 +27,11 @@ export interface BadgeProps {
     disabled?: string;
 }
 
-export class Badge extends Component<BadgeProps, { alertMessage: string }> {
-    static defaultProps: BadgeProps = { badgeType: "badge", label: "default", style: "default" };
+export class BadgeButton extends Component<BadgeButtonProps, { alertMessage: string }> {
+    static defaultProps: BadgeButtonProps = { label: "default", style: "default" };
     private onClickEvent: MouseEventHandler<HTMLDivElement>;
 
-    constructor(props: BadgeProps) {
+    constructor(props: BadgeButtonProps) {
         super(props);
 
         this.onClickEvent = () => this.handleOnClick(this.props);
@@ -44,62 +43,16 @@ export class Badge extends Component<BadgeProps, { alertMessage: string }> {
     }
 
     render() {
-        if (this.props.badgeType === "button") {
-            return this.createBadgeButton();
-        } else if (this.props.badgeType === "label") {
-            return this.createBadgeLabel();
-        } else {
-            return this.createBadge();
-        }
-    }
-
-    private createBadge() {
-        return createElement("div",
-            {
-                className: classNames("widget-badge-display",
-                    { "widget-badge-link": !!this.props.microflow }
-                ),
-                onClick: this.onClickEvent
-            },
-            DOM.span({ className: "widget-badge-text" }, this.props.label),
-            DOM.span({
-                className: classNames("widget-badge", "badge",
-                    { [`label-${this.props.style}`]: !!this.props.style }
-                )
-            }, this.props.badgeValue),
-            this.state.alertMessage ? createElement(ValidationAlert, { message: this.state.alertMessage }) : null
-        );
-    }
-
-    private createBadgeButton() {
         return createElement("button",
             {
-                className: classNames("widget-badge btn",
+                className: classNames("widget-badgebutton btn",
                     { [`btn-${this.props.style}`]: !!this.props.style }
                 ),
                 disabled: this.props.disabled,
                 onClick: this.onClickEvent
             },
-            DOM.span({ className: "widget-badge-text" }, this.props.label),
+            DOM.span({ className: "widget-badgebutton-text" }, this.props.label),
             DOM.span({ className: "badge" }, this.props.badgeValue),
-            this.state.alertMessage ? createElement(ValidationAlert, { message: this.state.alertMessage }) : null
-        );
-    }
-
-    private createBadgeLabel() {
-        return createElement("div",
-            {
-                className: classNames("widget-badge-display",
-                    { "widget-badge-link": !!this.props.microflow }
-                ),
-                onClick: this.onClickEvent
-            },
-            DOM.span({ className: "widget-badge-text" }, this.props.label),
-            DOM.span({
-                className: classNames("widget-badge", "label",
-                    { [`label-${this.props.style}`]: !!this.props.style }
-                )
-            }, this.props.badgeValue),
             this.state.alertMessage ? createElement(ValidationAlert, { message: this.state.alertMessage }) : null
         );
     }
@@ -115,12 +68,12 @@ export class Badge extends Component<BadgeProps, { alertMessage: string }> {
             errorMessage.push("'On click' Show a page is set and there is no 'Page' Selected in tab 'Events'");
         }
         if (errorMessage.length > 0) {
-            errorMessage.unshift("Error in configuration of the Badge widget");
+            errorMessage.unshift("Error in configuration of the BadgeButton widget");
             this.setState({ alertMessage: errorMessage.join("\n") });
         }
     }
 
-    private handleOnClick(props: BadgeProps) {
+    private handleOnClick(props: BadgeButtonProps) {
         if (props.microflow.onClickType === "callMicroflow"
             && props.microflow.microflowProps.name && props.microflow.microflowProps.guid) {
             window.mx.ui.action(props.microflow.microflowProps.name, {

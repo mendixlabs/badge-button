@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<widget id="com.mendix.widget.badge.Badge" needsEntityContext="true"
+<widget id="com.mendix.widget.badgebutton.BadgeButton" needsEntityContext="true"
     xmlns="http://www.mendix.com/widget/1.0/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../xsd/widget.xsd">
-    <name>Badge</name>
-    <description>Badges are numerical indicators of how many items are associated with a link</description>
+    <name>Badge button</name>
+    <description>Badge buttons are numerical indicators of how many items are associated with a link</description>
     <icon>
         /9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAARABwDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAUDBAYH/8QAKRAAAQMDAQcEAwAAAAAAAAAAAQACAwQFESEGEhY1UXORIjFUsYGS4f/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A6DLI+WRz5HFz3HJJOpKY2mx1t1jfJStYI2HdLnuwCegSwjBIPunFj2gqbRC+KJkckTnb2H50P4RFvg+6dYP3/iVvkrrZLJSmWWFzHepjXaZ6p5xtV/Fg8lZ6tqZ7hVy1UwzJIcndGg0xjwgkvfN6zuu+1SQhFC2WyPK3d0/QQhB//9k=
     </icon>
@@ -12,16 +12,6 @@
             <caption>Label</caption>
             <category>Display</category>
             <description>The label to display before the badge/label</description>
-        </property>
-        <property key="badgeType" type="enumeration" defaultValue="badge">
-            <caption>Render type</caption>
-            <category>Display</category>
-            <description>Render either the display of a label or of a badge</description>
-            <enumerationValues>
-                <enumerationValue key="badge">Badge</enumerationValue>
-                <enumerationValue key="button">Badge button</enumerationValue>
-                <enumerationValue key="label">Label</enumerationValue>
-            </enumerationValues>
         </property>
         <property key="badgeClass" type="enumeration" defaultValue="default">
             <caption>Style</caption>

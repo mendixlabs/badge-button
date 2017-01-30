@@ -4,18 +4,17 @@ import * as WidgetBase from "mxui/widget/_WidgetBase";
 import { createElement } from "react";
 import { render } from "react-dom";
 
-import { Badge as BadgeComponent, BadgeOnclick, PageSettings } from "./components/Badge";
+import { BadgeButton as BadgeButtonComponent, BadgeButtonOnclick, PageSettings } from "./components/BadgeButton";
 
-class Badge extends WidgetBase {
+class BadgeButton extends WidgetBase {
     // Attributes from modeler
     private valueAttribute: string;
     private styleAttribute: string;
     private labelAttribute: string;
-    private badgeType: "button" | "label" | "badge";
     private label: string;
     private badgeClass: string;
     private microflow: string;
-    onClickEvent: BadgeOnclick;
+    onClickEvent: BadgeButtonOnclick;
     page: string;
     pageSettings: PageSettings;
 
@@ -37,7 +36,7 @@ class Badge extends WidgetBase {
     }
 
    private updateRendering() {
-       render(createElement(BadgeComponent, {
+       render(createElement(BadgeButtonComponent, {
            microflow: {
                microflowProps: {
                    guid: this.contextObject ? this.contextObject.getGuid() : undefined,
@@ -51,7 +50,6 @@ class Badge extends WidgetBase {
                    pageSetting: this.pageSettings
                }
            },
-           badgeType: this.badgeType,
            badgeValue: this.getValue(this.valueAttribute, ""),
            disabled: this.contextObject ? undefined : "disabled",
            label: this.getValue(this.labelAttribute, this.label),
@@ -94,7 +92,7 @@ class Badge extends WidgetBase {
 }
 
 // tslint:disable : only-arrow-functions
-dojoDeclare("com.mendix.widget.badge.Badge", [ WidgetBase ], (function(Source: any) {
+dojoDeclare("com.mendix.widget.badgebutton.BadgeButton", [ WidgetBase ], (function(Source: any) {
         let result: any = {};
         for (let i in Source.prototype) {
             if (i !== "constructor" && Source.prototype.hasOwnProperty(i)) {
@@ -102,5 +100,5 @@ dojoDeclare("com.mendix.widget.badge.Badge", [ WidgetBase ], (function(Source: a
             }
         }
         return result;
-    }(Badge))
+    }(BadgeButton))
 );

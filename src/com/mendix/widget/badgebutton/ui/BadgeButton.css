@@ -1,12 +1,12 @@
-.widget-badge-text {
+.widget-badgebutton-text {
     white-space: nowrap;
     padding-right: 5px;
 }
 
-.widget-badge-link {
+.widget-badgebutton-link {
     cursor: pointer;
 }
 
-.widget-badge-display {
+.widget-badgebutton-display {
     display: inline-block;
 }

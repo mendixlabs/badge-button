@@ -1,6 +1,6 @@
 ### Description
 
-Badge is a special distinctive mark or token put on any display
+Badge button is a special distinctive mark or token put on any display as a button
 
 ### Features
 
@@ -14,12 +14,12 @@ Mendix 6
 
 ### Demo project
 
-https://badge.mxapps.io
+https://badge-button.mxapps.io
 
 ### Issues
 
 Issues can be reported via the git hub issue tracker:
-https://github.com/mendixlabs/badge/issues
+https://github.com/mendixlabs/badge-button/issues
 
 ### Disclaimer
 
