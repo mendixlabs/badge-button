@@ -92,7 +92,7 @@ class BadgeButton extends WidgetBase {
 }
 
 // tslint:disable : only-arrow-functions
-dojoDeclare("com.mendix.widget.badgebutton.BadgeButton", [ WidgetBase ], (function(Source: any) {
+dojoDeclare("com.mendix.widget.custom.badgebutton.BadgeButton", [ WidgetBase ], (function(Source: any) {
         let result: any = {};
         for (let i in Source.prototype) {
             if (i !== "constructor" && Source.prototype.hasOwnProperty(i)) {
