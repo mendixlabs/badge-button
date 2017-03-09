@@ -1,13 +1,10 @@
-import { Component, DOM, StatelessComponent , createElement } from "react";
+import { DOM , createElement } from "react";
 
 import * as classNames from "classnames";
 import { Alert } from "./Alert";
 
 export type BadgeButtonOnclick = "doNothing" | "showPage" | "callMicroflow";
 export type PageSettings = "content" | "popup" | "modal";
-
-export const ValidationAlert: StatelessComponent<{ message: string }> = (props) =>
-    DOM.div({ className: "alert alert-danger widget-validation-message" }, props.message);
 
 export interface BadgeButtonProps {
     alertMessage?: string;
@@ -19,33 +16,16 @@ export interface BadgeButtonProps {
     disabled?: string;
 }
 
-export class BadgeButton extends Component<BadgeButtonProps, { alertMessage?: string }> {
-    static defaultProps: BadgeButtonProps = { label: "default", style: "default" };
-
-    constructor(props: BadgeButtonProps) {
-        super(props);
-
-        this.state = { alertMessage: props.alertMessage };
-    }
-
-    componentWillReceiveProps(newProps: BadgeButtonProps) {
-        if (newProps.alertMessage !== this.props.alertMessage) {
-            this.setState({ alertMessage: newProps.alertMessage });
-        }
-    }
-
-    render() {
-        return createElement("button",
+export const BadgeButton = (props: BadgeButtonProps) =>
+createElement("button",
             {
                 className: classNames("widget-badgebutton btn",
-                    { [`btn-${this.props.style}`]: !!this.props.style }
+                    { [`btn-${props.style}`]: !!props.style }
                 ),
-                disabled: this.props.disabled,
-                onClick: this.props.onClickAction
+                disabled: props.disabled,
+                onClick: props.onClickAction
             },
-            DOM.span({ className: "widget-badgebutton-text" }, this.props.label),
-            DOM.span({ className: "badge" }, this.props.badgeValue),
-            createElement(Alert, { message: this.state.alertMessage })
+            DOM.span({ className: "widget-badgebutton-text" }, props.label),
+            DOM.span({ className: "badge" }, props.badgeValue),
+            createElement(Alert, { message: props.alertMessage })
         );
-    }
-}

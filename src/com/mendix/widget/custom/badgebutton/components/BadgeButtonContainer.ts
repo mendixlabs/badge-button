@@ -55,7 +55,6 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
             microflow: this.props.microflow,
             onClickAction: this.handleOnClick,
             style: this.state.style
-
         });
     }
 
@@ -109,7 +108,7 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
     }
 
     private checkConfig(): string {
-        let errorMessage: string = "";
+        let errorMessage = "";
         if (this.props.onClickEvent === "callMicroflow" && !this.props.microflow) {
             errorMessage = "on click microflow is required";
         } else if (this.props.onClickEvent === "showPage" && !this.props.page) {
@@ -125,6 +124,10 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
     private handleOnClick() {
         if (this.props.onClickEvent === "callMicroflow"
             && this.props.microflow && this.props.contextObject.getGuid()) {
+            const context = new mendix.lib.MxContext();
+            context.setTrackId(this.props.contextObject.getGuid());
+            context.setTrackEntity(this.props.contextObject.getEntity());
+
             window.mx.ui.action(this.props.microflow, {
                 error: (error) => {
                     this.setState({

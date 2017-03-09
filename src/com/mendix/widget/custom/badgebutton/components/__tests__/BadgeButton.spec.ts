@@ -2,7 +2,7 @@ import { shallow } from "enzyme";
 import { DOM, createElement } from "react";
 import * as classNames from "classnames";
 
-import { BadgeButton, BadgeButtonProps, ValidationAlert } from "../BadgeButton";
+import { BadgeButton, BadgeButtonProps } from "../BadgeButton";
 
 import { MockContext, mockMendix } from "tests/mocks/Mendix";
 
@@ -28,15 +28,6 @@ describe("BadgeButton", () => {
                     DOM.span({ className: "widget-badgebutton-text" }, badgeProps.label),
                     DOM.span({ className: "badge" }, badgeProps.badgeValue)
                 )
-            );
-        });
-
-        it("for validation alert", () => {
-            const message = "This is an error";
-            const validationAlert = shallow(createElement(ValidationAlert, { message }));
-
-            expect(validationAlert).toBeElement(
-                DOM.div({ className: "alert alert-danger widget-validation-message" }, message)
             );
         });
     });

@@ -22,7 +22,7 @@ class BadgeButton extends WidgetBase {
     // Internal variables
     private contextObject: mendix.lib.MxObject;
 
-   update(contextObject: mendix.lib.MxObject, callback?: Function) {
+   update(contextObject: mendix.lib.MxObject, callback?: () => void ) {
         this.contextObject = contextObject;
         this.updateRendering();
 
