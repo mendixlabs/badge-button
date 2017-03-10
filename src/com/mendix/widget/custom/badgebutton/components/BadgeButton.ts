@@ -17,15 +17,15 @@ export interface BadgeButtonProps {
 }
 
 export const BadgeButton = (props: BadgeButtonProps) =>
-createElement("button",
-            {
-                className: classNames("widget-badgebutton btn",
-                    { [`btn-${props.style}`]: !!props.style }
-                ),
-                disabled: props.disabled,
-                onClick: props.onClickAction
-            },
-            DOM.span({ className: "widget-badgebutton-text" }, props.label),
-            DOM.span({ className: "badge" }, props.badgeValue),
-            createElement(Alert, { message: props.alertMessage })
-        );
+    createElement("button",
+        {
+            className: classNames("widget-badgebutton btn",
+                { [`btn-${props.style}`]: !!props.style }
+            ),
+            disabled: props.disabled,
+            onClick: props.onClickAction
+        },
+        DOM.span({ className: "widget-badgebutton-text" }, props.label),
+        DOM.span({ className: "badge" }, props.badgeValue),
+        createElement(Alert, { message: props.alertMessage })
+    );
