@@ -70,7 +70,7 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
     private updateValues() {
         this.setState({
             badgeValue: this.getValue(this.props.valueAttribute, ""),
-            label: this.getValue(this.props.labelAttribute, "new"),
+            label: this.getValue(this.props.labelAttribute, this.props.label),
             style: this.getValue(this.props.styleAttribute, this.props.badgeClass)
         });
     }
@@ -115,7 +115,7 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
             errorMessage = "on click page is required";
         }
         if (errorMessage) {
-            errorMessage = `Error in progress circle configuration: ${errorMessage}`;
+            errorMessage = `Error in badge button configuration: ${errorMessage}`;
         }
 
         return errorMessage;
