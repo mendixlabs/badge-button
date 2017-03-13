@@ -11,7 +11,7 @@ export interface BadgeButtonProps {
     label?: string;
     badgeValue?: string;
     style?: string;
-    microflow?: string;
+    clickable?: string;
     onClickAction?: () => void;
     disabled?: string;
 }
