@@ -1,10 +1,7 @@
-import { DOM , createElement } from "react";
+import { DOM, createElement } from "react";
 
 import * as classNames from "classnames";
 import { Alert } from "./Alert";
-
-export type BadgeButtonOnclick = "doNothing" | "showPage" | "callMicroflow";
-export type PageSettings = "content" | "popup" | "modal";
 
 export interface BadgeButtonProps {
     alertMessage?: string;

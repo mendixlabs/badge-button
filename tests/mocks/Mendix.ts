@@ -80,6 +80,7 @@ export class MockContext implements mendix.lib.MxContext {
     setTrackId(guid: string): void { }
     setTrackEntity(entity: string): void { }
     setTrackObject(obj: mendix.lib.MxObject): void { }
+    setContext(trackEntity: string, guid: string): void { }
 }
 
 let mxMockObject =  MxMock.prototype;

@@ -1,16 +1,16 @@
 import { Component, createElement } from "react";
 
-import { BadgeButton, BadgeButtonOnclick, PageSettings } from "./BadgeButton";
+import { BadgeButton } from "./BadgeButton";
 import { Alert } from "./Alert";
 
 interface BadgeButtonContainerProps {
-    contextObject: mendix.lib.MxObject;
+    mxObject: mendix.lib.MxObject;
     valueAttribute: string;
     styleAttribute: string;
     labelAttribute: string;
     label: string;
     badgeClass: string;
-    clickable: string;
+    microflow: string;
     onClickEvent: BadgeButtonOnclick;
     page: string;
     pageSettings: PageSettings;
@@ -24,6 +24,9 @@ interface BadgeButtonContainerState {
     style: string;
 }
 
+type BadgeButtonOnclick = "doNothing" | "showPage" | "callMicroflow";
+type PageSettings = "content" | "popup" | "modal";
+
 class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeButtonContainerState> {
     private subscriptionHandles: number[];
 
@@ -31,13 +34,13 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
         super(props);
 
         this.state = {
-            alertMessage: this.checkConfig(),
-            badgeValue: this.getValue(props.valueAttribute, ""),
-            label: this.getValue(props.labelAttribute, this.props.label),
-            showAlert: !!this.checkConfig(),
-            style: this.getValue(props.styleAttribute, props.badgeClass)
+            alertMessage: this.validateProps(),
+            badgeValue: this.getValue(props.mxObject, props.valueAttribute, ""),
+            label: this.getValue(props.mxObject, props.labelAttribute, this.props.label),
+            showAlert: !!this.validateProps(),
+            style: this.getValue(props.mxObject, props.styleAttribute, props.badgeClass)
         };
-        this.resetSubscriptions(props.contextObject);
+        this.resetSubscriptions(props.mxObject);
         this.handleOnClick = this.handleOnClick.bind(this);
     }
 
@@ -49,8 +52,8 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
         return createElement(BadgeButton, {
             alertMessage: this.state.alertMessage,
             badgeValue: this.state.badgeValue,
-            clickable: this.props.clickable,
-            disabled: this.props.contextObject ? undefined : "disabled",
+            clickable: this.props.microflow,
+            disabled: this.props.mxObject ? undefined : "disabled",
             label: this.state.label,
             onClickAction: this.handleOnClick,
             style: this.state.style
@@ -58,44 +61,44 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
     }
 
     componentWillReceiveProps(newProps: BadgeButtonContainerProps) {
-        this.resetSubscriptions(newProps.contextObject);
-        this.updateValues();
+        this.resetSubscriptions(newProps.mxObject);
+        this.updateValues(newProps.mxObject);
     }
 
     componentWillUnmount() {
         this.unsubscribe();
     }
 
-    private updateValues() {
+    private updateValues(mxObject: mendix.lib.MxObject) {
         this.setState({
-            badgeValue: this.getValue(this.props.valueAttribute, ""),
-            label: this.getValue(this.props.labelAttribute, this.props.label),
-            style: this.getValue(this.props.styleAttribute, this.props.badgeClass)
+            badgeValue: this.getValue(mxObject, this.props.valueAttribute, ""),
+            label: this.getValue(mxObject, this.props.labelAttribute, this.props.label),
+            style: this.getValue(mxObject, this.props.styleAttribute, this.props.badgeClass)
         });
     }
 
-    private getValue(attributeName: string, defaultValue: string) {
-        if (this.props.contextObject) {
-            return this.props.contextObject.get(attributeName) as string || defaultValue;
+    private getValue(mxObject: mendix.lib.MxObject, attributeName: string, defaultValue: string) {
+        if (mxObject) {
+            return mxObject.get(attributeName) as string || defaultValue;
         }
         return defaultValue;
     }
 
-    private resetSubscriptions(contextObject: mendix.lib.MxObject) {
+    private resetSubscriptions(mxObject: mendix.lib.MxObject) {
         this.unsubscribe();
 
         this.subscriptionHandles = [];
-        if (contextObject) {
+        if (mxObject) {
             this.subscriptionHandles.push(window.mx.data.subscribe({
-                callback: () => this.updateValues(),
-                guid: contextObject.getGuid()
+                callback: () => this.updateValues(mxObject),
+                guid: mxObject.getGuid()
             }));
 
             [ this.props.valueAttribute, this.props.styleAttribute, this.props.labelAttribute ].forEach((attr) =>
                 this.subscriptionHandles.push(window.mx.data.subscribe({
                     attr,
-                    callback: () => this.updateValues(),
-                    guid: contextObject.getGuid()
+                    callback: () => this.updateValues(mxObject),
+                    guid: mxObject.getGuid()
                 }))
             );
         }
@@ -107,9 +110,9 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
         }
     }
 
-    private checkConfig(): string {
+    private validateProps(): string {
         let errorMessage = "";
-        if (this.props.onClickEvent === "callMicroflow" && !this.props.clickable) {
+        if (this.props.onClickEvent === "callMicroflow" && !this.props.microflow) {
             errorMessage = "on click microflow is required";
         } else if (this.props.onClickEvent === "showPage" && !this.props.page) {
             errorMessage = "on click page is required";
@@ -122,25 +125,20 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
     }
 
     private handleOnClick() {
-        const { onClickEvent, clickable, contextObject, page } = this.props;
+        const { onClickEvent, microflow, mxObject, page } = this.props;
         const context = new mendix.lib.MxContext();
-        context.setContext(contextObject.getEntity(), contextObject.getGuid());
-        if (onClickEvent === "callMicroflow" && clickable && contextObject.getGuid()) {
-            window.mx.ui.action(clickable, {
+        context.setContext(mxObject.getEntity(), mxObject.getGuid());
+        if (onClickEvent === "callMicroflow" && microflow && mxObject.getGuid()) {
+            window.mx.ui.action(microflow, {
                 context,
                 error: (error) => {
                     this.setState({
-                        alertMessage:
-                        `Error while executing microflow: ${clickable}: ${error.message}`,
+                        alertMessage: `Error while executing microflow: ${microflow}: ${error.message}`,
                         showAlert: false
                     });
-                },
-                params: {
-                    applyto: "selection",
-                    guids: [ contextObject.getGuid() ]
                 }
             });
-        } else if (onClickEvent === "showPage" && page && contextObject.getGuid()) {
+        } else if (onClickEvent === "showPage" && page && mxObject.getGuid()) {
             window.mx.ui.openForm(page, {
                 context,
                 error: (error) =>

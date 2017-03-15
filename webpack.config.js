@@ -3,7 +3,7 @@ var CopyWebpackPlugin = require("copy-webpack-plugin");
 var path = require("path");
 
 module.exports = {
-    entry: "./src/com/mendix/widget/custom/badgebutton/BadgeButton.ts",
+    entry: "./src/components/BadgeButtonContainer.ts",
     output: {
         path: __dirname + "/dist/tmp",
         filename: "src/com/mendix/widget/custom/badgebutton/BadgeButton.js",
@@ -23,7 +23,7 @@ module.exports = {
         ]
     },
     devtool: "source-map",
-    externals: [ "mxui/widget/_WidgetBase", "dojo/_base/declare" ],
+    externals: [ "react", "react-dom"],
     plugins: [
         new CopyWebpackPlugin([
             { from: "src/**/*.js" },
