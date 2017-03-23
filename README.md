@@ -10,7 +10,7 @@ Badge button is a special distinctive mark or token put on any display as a butt
 
 ### Dependencies
 
-Mendix 6
+Mendix 7
 
 ### Demo project
 
