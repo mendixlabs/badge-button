@@ -17,7 +17,7 @@ interface BadgeButtonContainerProps {
 
 interface BadgeButtonContainerState {
     alertMessage?: string;
-    badgeValue: string;
+    value: string;
     label: string;
     showAlert?: boolean;
     style: string;
@@ -33,10 +33,10 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
 
         this.state = {
             alertMessage: this.validateProps(),
-            badgeValue: this.getValue(props.mxObject, props.valueAttribute, ""),
             label: this.getValue(props.mxObject, props.labelAttribute, this.props.label),
             showAlert: !!this.validateProps(),
-            style: this.getValue(props.mxObject, props.styleAttribute, props.badgeClass)
+            style: this.getValue(props.mxObject, props.styleAttribute, props.badgeClass),
+            value: this.getValue(props.mxObject, props.valueAttribute, "")
         };
         this.resetSubscriptions(props.mxObject);
         this.handleOnClick = this.handleOnClick.bind(this);
@@ -49,12 +49,11 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
 
         return createElement(BadgeButton, {
             alertMessage: this.state.alertMessage,
-            badgeValue: this.state.badgeValue,
             clickable: this.props.microflow,
-            disabled: this.props.mxObject ? undefined : "disabled",
             label: this.state.label,
             onClickAction: this.handleOnClick,
-            style: this.state.style
+            style: this.state.style,
+            value: this.state.value
         });
     }
 
@@ -69,9 +68,9 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
 
     private updateValues(mxObject: mendix.lib.MxObject) {
         this.setState({
-            badgeValue: this.getValue(mxObject, this.props.valueAttribute, ""),
             label: this.getValue(mxObject, this.props.labelAttribute, this.props.label),
-            style: this.getValue(mxObject, this.props.styleAttribute, this.props.badgeClass)
+            style: this.getValue(mxObject, this.props.styleAttribute, this.props.badgeClass),
+            value: this.getValue(mxObject, this.props.valueAttribute, "")
         });
     }
 
@@ -119,7 +118,7 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
             errorMessage = `Error in badge button configuration: ${errorMessage}`;
         }
 
-        return errorMessage;
+        return errorMessage && `Error in badge button configuration: ${errorMessage}`;
     }
 
     private handleOnClick() {

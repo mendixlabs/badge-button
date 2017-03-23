@@ -1,28 +1,26 @@
 import { DOM, createElement } from "react";
-
 import * as classNames from "classnames";
+
 import { Alert } from "./Alert";
+
+import "../ui/BadgeButton.css";
 
 export interface BadgeButtonProps {
     alertMessage?: string;
     label?: string;
-    badgeValue?: string;
+    value?: string;
     style?: string;
     clickable?: string;
     onClickAction?: () => void;
-    disabled?: string;
 }
 
 export const BadgeButton = (props: BadgeButtonProps) =>
     createElement("button",
         {
-            className: classNames("widget-badgebutton btn",
-                { [`btn-${props.style}`]: !!props.style }
-            ),
-            disabled: props.disabled,
+            className: classNames("widget-badgebutton btn", { [`btn-${props.style}`]: !!props.style }),
             onClick: props.onClickAction
         },
         DOM.span({ className: "widget-badgebutton-text" }, props.label),
-        DOM.span({ className: "badge" }, props.badgeValue),
+        DOM.span({ className: "badge" }, props.value),
         createElement(Alert, { message: props.alertMessage })
     );
