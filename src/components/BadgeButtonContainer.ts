@@ -13,7 +13,6 @@ interface BadgeButtonContainerProps {
     microflow: string;
     onClickEvent: BadgeButtonOnclick;
     page: string;
-    pageSettings: PageSettings;
 }
 
 interface BadgeButtonContainerState {
@@ -25,7 +24,6 @@ interface BadgeButtonContainerState {
 }
 
 type BadgeButtonOnclick = "doNothing" | "showPage" | "callMicroflow";
-type PageSettings = "content" | "popup" | "modal";
 
 class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeButtonContainerState> {
     private subscriptionHandles: number[];
@@ -128,25 +126,19 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
         const { onClickEvent, microflow, mxObject, page } = this.props;
         const context = new mendix.lib.MxContext();
         context.setContext(mxObject.getEntity(), mxObject.getGuid());
+
         if (onClickEvent === "callMicroflow" && microflow && mxObject.getGuid()) {
             window.mx.ui.action(microflow, {
-                context,
-                error: (error) => {
-                    this.setState({
-                        alertMessage: `Error while executing microflow: ${microflow}: ${error.message}`,
-                        showAlert: false
-                    });
+                error: (error) => window.mx.ui.error(`Error while executing microflow: ${microflow}: ${error.message}`),
+                params: {
+                    applyto: "selection",
+                    guids: [ mxObject.getGuid() ]
                 }
             });
         } else if (onClickEvent === "showPage" && page && mxObject.getGuid()) {
             window.mx.ui.openForm(page, {
                 context,
-                error: (error) =>
-                    this.setState({
-                        alertMessage: `Error while opening page ${page}: ${error.message}`,
-                        showAlert: false
-                    }),
-                location: this.props.pageSettings
+                error: (error) => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
             });
         }
     }

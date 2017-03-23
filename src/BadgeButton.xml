@@ -29,7 +29,7 @@
         <property key="styleAttribute" type="attribute" required="false">
             <caption>Bootstrap style</caption>
             <category>Data source</category>
-            <description>Value of attribute should be: info, warning, danger, success. Alternatively use the 'Class' property set Common category</description>
+            <description>The attribute value should be: info, warning, danger, success. Alternatively use the 'Class' property set Common category</description>
             <attributeTypes>
                 <attributeType name="Enum" />
                 <attributeType name="String" />
@@ -75,16 +75,6 @@
             <caption>Page</caption>
             <category>Events</category>
             <description>The page that will be opened on click</description>
-        </property>
-        <property key="pageSettings" type="enumeration" defaultValue="popup">
-            <caption>Page settings</caption>
-            <category>Events</category>
-            <description/>
-            <enumerationValues>
-                <enumerationValue key="content">In content</enumerationValue>
-                <enumerationValue key="popup">Pop-up</enumerationValue>
-                <enumerationValue key="modal">Blocking pop-up</enumerationValue>
-            </enumerationValues>
         </property>
     </properties>
 </widget>
