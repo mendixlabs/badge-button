@@ -11,7 +11,7 @@ interface BadgeButtonContainerProps {
     label: string;
     badgeClass: string;
     microflow: string;
-    onClickEvent: BadgeButtonOnclick;
+    onClickEvent: OnClickOptions;
     page: string;
 }
 
@@ -23,7 +23,7 @@ interface BadgeButtonContainerState {
     style: string;
 }
 
-type BadgeButtonOnclick = "doNothing" | "showPage" | "callMicroflow";
+type OnClickOptions = "doNothing" | "showPage" | "callMicroflow";
 
 class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeButtonContainerState> {
     private subscriptionHandles: number[];

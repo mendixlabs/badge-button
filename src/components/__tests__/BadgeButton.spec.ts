@@ -19,19 +19,19 @@ describe("BadgeButton", () => {
         expect(badge).toBeElement(
             createElement("button",
                 {
-                    className: classNames("widget-badgebutton btn",
+                    className: classNames("widget-badge-button btn",
                         { [`btn-${badgeProps.style}`]: !!badgeProps.style }
                     ),
                     onClick: jasmine.any(Function) as any
                 },
-                DOM.span({ className: "widget-badgebutton-text" }, badgeProps.label),
+                DOM.span({ className: "widget-badge-button-text" }, badgeProps.label),
                 DOM.span({ className: "badge" }, badgeProps.value),
                 createElement(Alert)
             )
         );
     });
 
-    it("with click function should respond to click event", () => {
+    it("with a click function should respond to click event", () => {
         const badgeProps: BadgeButtonProps = {
             label: "Custom Label",
             onClickAction: jasmine.createSpy("onClick"),
@@ -42,10 +42,10 @@ describe("BadgeButton", () => {
 
         badge.simulate("click");
 
-        expect(onClick).toHaveBeenCalledTimes(1);
+        expect(onClick).toHaveBeenCalled();
     });
 
-    it("should render with style 'default'", () => {
+    it("with style default should render with class btn-default", () => {
         const badgeProps: BadgeButtonProps = {
             label: "Custom Label",
             style: "default"
@@ -53,10 +53,10 @@ describe("BadgeButton", () => {
 
         const badgeComponent = createBadgeButton(badgeProps);
 
-        expect(badgeComponent.hasClass("widget-badgebutton btn btn-default")).toBe(true);
+        expect(badgeComponent.hasClass("btn-default")).toBe(true);
     });
 
-    it("should render with style 'primary'", () => {
+    it("with style primary should render with class btn-primary", () => {
         const badgeProps: BadgeButtonProps = {
             label: "Custom Label",
             style: "primary"
@@ -64,10 +64,10 @@ describe("BadgeButton", () => {
 
         const badgeComponent = createBadgeButton(badgeProps);
 
-        expect(badgeComponent.hasClass("widget-badgebutton btn btn-primary")).toBe(true);
+        expect(badgeComponent.hasClass("btn-primary")).toBe(true);
     });
 
-    it("should render with style 'success'", () => {
+    it("with style success should render with class btn-success", () => {
         const badgeProps: BadgeButtonProps = {
             label: "Custom Label",
             style: "success"
@@ -75,10 +75,10 @@ describe("BadgeButton", () => {
 
         const badgeComponent = createBadgeButton(badgeProps);
 
-        expect(badgeComponent.hasClass("widget-badgebutton btn btn-success")).toBe(true);
+        expect(badgeComponent.hasClass("btn-success")).toBe(true);
     });
 
-    it("should render with style 'info'", () => {
+    it("with style info should render with class btn-info", () => {
         const badgeProps: BadgeButtonProps = {
             label: "Custom Label",
             style: "info"
@@ -86,10 +86,10 @@ describe("BadgeButton", () => {
 
         const badgeComponent = createBadgeButton(badgeProps);
 
-        expect(badgeComponent.hasClass("widget-badgebutton btn btn-info")).toBe(true);
+        expect(badgeComponent.hasClass("btn-info")).toBe(true);
     });
 
-    it("should render with style 'warning'", () => {
+    it("with style warning should render with class btn-warning", () => {
         const badgeProps: BadgeButtonProps = {
             label: "Custom Label",
             style: "warning"
@@ -97,10 +97,10 @@ describe("BadgeButton", () => {
 
         const badgeComponent = createBadgeButton(badgeProps);
 
-        expect(badgeComponent.hasClass("widget-badgebutton btn btn-warning")).toBe(true);
+        expect(badgeComponent.hasClass("btn-warning")).toBe(true);
     });
 
-    it("should render with style 'danger'", () => {
+    it("with style danger should render with class btn-danger", () => {
         const badgeProps: BadgeButtonProps = {
             label: "Custom Label",
             style: "danger"
@@ -108,6 +108,6 @@ describe("BadgeButton", () => {
 
         const badgeComponent = createBadgeButton(badgeProps);
 
-        expect(badgeComponent.hasClass("widget-badgebutton btn btn-danger")).toBe(true);
+        expect(badgeComponent.hasClass("btn-danger")).toBe(true);
     });
 });

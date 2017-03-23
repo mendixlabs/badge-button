@@ -1,12 +1,8 @@
-.widget-badgebutton-text {
+.widget-badge-button {
+    display: inline-block;
+}
+
+.widget-badge-button-text {
     white-space: nowrap;
     padding-right: 5px;
-}
-
-.widget-badgebutton-link {
-    cursor: pointer;
-}
-
-.widget-badgebut {
-    display: inline-block;
 }
