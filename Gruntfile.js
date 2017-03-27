@@ -1,15 +1,24 @@
 "use strict";
-var webpackConfig = require("./webpack.config");
+const webpack = require("webpack");
+const webpackConfig = require("./webpack.config");
+const webpackConfigRelease = {};
+let plugins = webpackConfig.plugins.slice(0);
+plugins.push(new webpack.optimize.UglifyJsPlugin());
+Object.assign(webpackConfigRelease, webpackConfig, { 
+    devtool: false,
+    plugins: plugins
+});
 
 module.exports = function (grunt) {
     var pkg = grunt.file.readJSON("package.json");
     grunt.initConfig({
         pkgName: pkg.name,
         name: pkg.name,
+
         watch: {
             updateWidgetFiles: {
                 "files": [ "./dist/tmp/src/**/*" ],
-                "tasks": [ "compress:dist", "copy:distDeployment", "copy:mpk" ],
+                "tasks": [  "webpack:develop", "compress:dist", "copy:distDeployment", "copy:mpk" ],
                 options: {
                     debounceDelay: 250,
                     livereload: true
@@ -39,32 +48,42 @@ module.exports = function (grunt) {
 
         copy: {
             distDeployment: {
-                files: [
-                    { dest: "./dist/MxTestProject/deployment/web/widgets", cwd: "./dist/tmp/src/", src: [ "**/*" ], expand: true }
-                ]
+                files: [ {
+                    dest: "./dist/MxTestProject/deployment/web/widgets",
+                    cwd: "./dist/tmp/src/",
+                    src: [ "**/*" ],
+                    expand: true
+                } ]
             },
             mpk: {
-                files: [
-                    { dest: "./dist/MxTestProject/widgets", cwd: "./dist/" + pkg.version + "/", src: [ pkg.name + ".mpk" ], expand: true }
-                ]
+                files: [ {
+                    dest: "./dist/MxTestProject/widgets",
+                    cwd: "./dist/" + pkg.version + "/",
+                    src: [ pkg.name + ".mpk" ],
+                    expand: true
+                } ]
             },
             source: {
                 files: [
-                    { dest: "./dist/tmp/src", cwd: "./src/", src: [ "**/*", "!**/*.ts", "!**/*.css" ], expand: true }
+                    {
+                        dest: "./dist/tmp/src",
+                        cwd: "./src/",
+                        src: [ "**/*", "!**/*.ts", "!**/*.css" ],
+                        expand: true
+                    }
                 ]
             }
         },
 
         webpack: {
-            renderer: webpackConfig
+            develop: webpackConfig,
+            release: webpackConfigRelease
         },
 
         clean: {
             build: [
                 "./dist/" + pkg.version + "/" + pkg.name + "/*",
-                "./dist/src/**/*",
-                "./dist/tsc/**/*",
-                "./dist/testresults/**/*",
+                "./dist/tmp/**/*",
                 "./dist/MxTestProject/deployment/web/widgets/" + pkg.name + "/*",
                 "./dist/MxTestProject/widgets/" + pkg.name + ".mpk"
             ]
@@ -82,11 +101,16 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-check-dependencies");
     grunt.loadNpmTasks("grunt-webpack");
 
-    grunt.registerTask("default", ["clean build", "watch" ]);
+    grunt.registerTask("default", [ "clean build", "watch" ]);
     grunt.registerTask(
         "clean build",
         "Compiles all the assets and copies the files to the build directory.",
-        [ "checkDependencies", "clean:build", "webpack" , "compress:dist", "copy:mpk" ]
+        [ "checkDependencies", "clean:build", "webpack:develop", "compress:dist", "copy:mpk" ]
+    );
+    grunt.registerTask(
+        "release",
+        "Compiles all the assets and copies the files to the build directory.",
+        [ "checkDependencies", "clean:build", "webpack:release", "compress:dist", "copy:mpk" ]
     );
     grunt.registerTask("build", [ "clean build" ]);
 };
