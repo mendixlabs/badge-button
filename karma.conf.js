@@ -1,13 +1,13 @@
-var webpackConfig = require("./webpack.config");
+let webpackConfig = require("./webpack.config");
 const path = require("path");
 Object.assign(webpackConfig, {
     devtool: "inline-source-map",
-    externals: webpackConfig.externals.concat([
+    externals: [
         "react/lib/ExecutionEnvironment",
         "react/lib/ReactContext",
         "react/addons",
         "jsdom"
-    ])
+    ]
 });
 
 module.exports = function(config) {
@@ -37,7 +37,7 @@ module.exports = function(config) {
         preprocessors: { "tests/test-index.js": [ "webpack", "sourcemap" ] },
         webpack: webpackConfig,
         webpackServer: { noInfo: true },
-        reporters: [ "progress", config.codeCoverage ? "coverage": "kjhtml" ],
+        reporters: [ "progress", config.codeCoverage ? "coverage" : "kjhtml" ],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
