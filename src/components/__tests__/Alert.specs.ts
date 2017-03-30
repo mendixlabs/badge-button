@@ -9,7 +9,7 @@ describe("Alert", () => {
         const alert = shallow(createElement(Alert, { message }));
 
         expect(alert).toBeElement(
-            DOM.div({ className: "alert alert-danger widget-badge-button-alert" }, message)
+            DOM.div({ className: "alert alert-danger badge-alert" }, message)
         );
     });
 
