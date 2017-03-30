@@ -2,6 +2,7 @@
 class MxMock implements mx.mx {
     appUrl: string;
     baseUrl: string;
+    remoteUrl: string;
     modulePath: string
     addOnLoad(callback: Function): void { /* */ }
     login(username: string, password: string, onSuccess: Function, onError: Function): void { /* */ }
@@ -27,14 +28,14 @@ class MxUiMock implements mx.ui {
                 xpath?: string,
                 constraints?: string,
                 sort?: any,
-                gridid?: string,
+                gridid?: string
             },
             context?: any,
             store?: any,
             async?: boolean,
             callback?: (result: mendix.lib.MxObject | mendix.lib.MxObject[] | boolean | number | string) => void,
             error?: (e: Error) => void,
-            onValidation?: Function,
+            onValidation?: Function
         },
         scope?: any
     ): void { /* */ }
@@ -62,25 +63,13 @@ class MxUiMock implements mx.ui {
             title?: string,
             context?: mendix.lib.MxContext,
             callback?(form: mxui.lib.form._FormBase): void,
-            error?(error: Error): void,
+            error?(error: Error): void
         },
         scope?: any
     ): void { /* */ }
     showLogin(messageCode: number): void { /* */ }
-}
-
-export class MockContext implements mendix.lib.MxContext {
-    constructor(){}
-    getTrackEntity(): string { return "mockEntity"; }
-    getTrackId(): string { return "mockID"; }
-    getTrackObject(): mendix.lib.MxObject { return new mendix.lib.MxObject; } //TODO update
-    hasTrackEntity(): boolean { return true; }
-    hasTrackId(): boolean { return true; }
-    hasTrackObject(): boolean { return true; }
-    setTrackId(guid: string): void { }
-    setTrackEntity(entity: string): void { }
-    setTrackObject(obj: mendix.lib.MxObject): void { }
-    setContext(trackEntity: string, guid: string): void { }
+    translate(lib: string, errorName: string): string { return lib + "_" + errorName };
+    reload(callback?: () => void): void{}
 }
 
 let mxMockObject =  MxMock.prototype;
