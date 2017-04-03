@@ -25,7 +25,7 @@ interface BadgeButtonContainerState {
 
 type OnClickOptions = "doNothing" | "showPage" | "callMicroflow";
 
-class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeButtonContainerState> {
+export default class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeButtonContainerState> {
     private subscriptionHandles: number[];
 
     constructor(props: BadgeButtonContainerProps) {
@@ -142,5 +142,3 @@ class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeBut
         }
     }
 }
-
-export { BadgeButtonContainer as default };

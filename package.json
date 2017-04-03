@@ -1,7 +1,7 @@
 {
   "name": "badgebutton",
   "widgetName": "BadgeButton",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Badge buttons are numerical indicators of how many items are associated with a link",
   "scripts": {
     "pretest": "tsc",
