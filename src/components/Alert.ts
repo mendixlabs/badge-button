@@ -1,6 +1,6 @@
-import { DOM, StatelessComponent } from "react";
+import { DOM, SFC } from "react";
 
-export const Alert: StatelessComponent<{ message?: string }> = (message) =>
+export const Alert: SFC<{ message?: string }> = (message) =>
     message
         ? DOM.div({ className: "alert alert-danger widget-badge-button-alert" }, message)
         : null as any;
