@@ -9,8 +9,8 @@ Object.assign(webpackConfigRelease, webpackConfig, {
     plugins: plugins
 });
 
-module.exports = function (grunt) {
-    var pkg = grunt.file.readJSON("package.json");
+module.exports = function(grunt) {
+    const pkg = grunt.file.readJSON("package.json");
     grunt.initConfig({
 
         watch: {

@@ -63,7 +63,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     }
 
     componentWillUnmount() {
-        this.unsubscribe();
+		this.subscriptionHandles.forEach(window.mx.data.unsubscribe);
     }
 
     private updateValues(mxObject: mendix.lib.MxObject) {
@@ -82,8 +82,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     }
 
     private resetSubscriptions(mxObject: mendix.lib.MxObject) {
-        this.unsubscribe();
-
+		this.subscriptionHandles.forEach(window.mx.data.unsubscribe);
         this.subscriptionHandles = [];
         if (mxObject) {
             this.subscriptionHandles.push(window.mx.data.subscribe({
@@ -101,12 +100,6 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         }
     }
 
-    private unsubscribe() {
-        if (this.subscriptionHandles) {
-            this.subscriptionHandles.forEach((handle) => window.mx.data.unsubscribe(handle));
-        }
-    }
-
     private validateProps(): string {
         let errorMessage = "";
         if (this.props.onClickEvent === "callMicroflow" && !this.props.microflow) {
@@ -121,24 +114,26 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         return errorMessage && `Error in badge button configuration: ${errorMessage}`;
     }
 
-    private handleOnClick() {
-        const { onClickEvent, microflow, mxObject, page } = this.props;
-        const context = new mendix.lib.MxContext();
-        context.setContext(mxObject.getEntity(), mxObject.getGuid());
-
-        if (onClickEvent === "callMicroflow" && microflow && mxObject.getGuid()) {
-            window.mx.ui.action(microflow, {
-                error: (error) => window.mx.ui.error(`Error while executing microflow: ${microflow}: ${error.message}`),
-                params: {
-                    applyto: "selection",
-                    guids: [ mxObject.getGuid() ]
-                }
-            });
-        } else if (onClickEvent === "showPage" && page && mxObject.getGuid()) {
-            window.mx.ui.openForm(page, {
-                context,
-                error: (error) => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
-            });
-        }
-    }
+	private handleOnClick() {
+		const { mxObject, onClickEvent, microflow, page } = this.props;
+		if (!mxObject || !mxObject.getGuid()) {
+			return;
+		}
+		const context = new mendix.lib.MxContext();
+		context.setContext(mxObject.getEntity(), mxObject.getGuid());
+		if (onClickEvent === "callMicroflow" && microflow && mxObject.getGuid()) {
+			window.mx.ui.action(microflow, {
+				error: (error) => window.mx.ui.error(`Error while executing microflow: ${microflow}: ${error.message}`),
+				params: {
+					applyto: "selection",
+					guids: [ mxObject.getGuid() ]
+				}
+			});
+		} else if (onClickEvent === "showPage" && page && mxObject.getGuid()) {
+			window.mx.ui.openForm(page, {
+				context,
+				error: (error) => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
+			});
+		}
+	}
 }
