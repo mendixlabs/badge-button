@@ -3,6 +3,5 @@ declare namespace jasmine {
         asymmetricMatch(other: any): boolean;
     }
 
-    interface MatchersUtil {}
-    export var matchersUtil: MatchersUtil;
+    export const matchersUtil: MatchersUtil;
 }
