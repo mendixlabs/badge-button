@@ -28,7 +28,7 @@ module.exports = {
     devtool: "source-map",
     externals: [ "react", "react-dom" ],
     plugins: [
-        new CopyWebpackPlugin([ { from: "src/**/*.js" }, { from: "src/**/*.xml" } ], { copyUnmodified: true }),
+        new CopyWebpackPlugin([ { from: "src/**/*.xml" } ], { copyUnmodified: true }),
         new ExtractTextPlugin({ filename: "./src/com/mendix/widget/custom/badgebutton/ui/BadgeButton.css" }),
         new webpack.LoaderOptionsPlugin({ debug: true })
     ]
