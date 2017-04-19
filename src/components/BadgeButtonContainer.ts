@@ -9,7 +9,8 @@ interface BadgeButtonContainerProps {
     styleAttribute: string;
     labelAttribute: string;
     label: string;
-    badgeClass: string;
+    badgeStyle: string;
+    badgeButtonValue: string;
     microflow: string;
     onClickEvent: OnClickOptions;
     page: string;
@@ -35,10 +36,10 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
             alertMessage: this.validateProps(),
             label: this.getValue(props.mxObject, props.labelAttribute, this.props.label),
             showAlert: !!this.validateProps(),
-            style: this.getValue(props.mxObject, props.styleAttribute, props.badgeClass),
-            value: this.getValue(props.mxObject, props.valueAttribute, "")
+            style: this.getValue(props.mxObject, props.styleAttribute, props.badgeStyle),
+            value: this.getValue(props.mxObject, props.valueAttribute, props.badgeButtonValue)
         };
-        this.resetSubscriptions(props.mxObject);
+        this.subscriptionHandles = [];
         this.handleOnClick = this.handleOnClick.bind(this);
     }
 
@@ -63,14 +64,14 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     }
 
     componentWillUnmount() {
-		this.subscriptionHandles.forEach(window.mx.data.unsubscribe);
+        this.subscriptionHandles.forEach(window.mx.data.unsubscribe);
     }
 
     private updateValues(mxObject: mendix.lib.MxObject) {
         this.setState({
             label: this.getValue(mxObject, this.props.labelAttribute, this.props.label),
-            style: this.getValue(mxObject, this.props.styleAttribute, this.props.badgeClass),
-            value: this.getValue(mxObject, this.props.valueAttribute, "")
+            style: this.getValue(mxObject, this.props.styleAttribute, this.props.badgeStyle),
+            value: this.getValue(mxObject, this.props.valueAttribute, this.props.badgeButtonValue)
         });
     }
 
@@ -82,8 +83,8 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     }
 
     private resetSubscriptions(mxObject: mendix.lib.MxObject) {
-		this.subscriptionHandles.forEach(window.mx.data.unsubscribe);
-        this.subscriptionHandles = [];
+        this.subscriptionHandles.forEach(window.mx.data.unsubscribe);
+
         if (mxObject) {
             this.subscriptionHandles.push(window.mx.data.subscribe({
                 callback: () => this.updateValues(mxObject),
@@ -114,26 +115,26 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         return errorMessage && `Error in badge button configuration: ${errorMessage}`;
     }
 
-	private handleOnClick() {
-		const { mxObject, onClickEvent, microflow, page } = this.props;
-		if (!mxObject || !mxObject.getGuid()) {
-			return;
-		}
-		const context = new mendix.lib.MxContext();
-		context.setContext(mxObject.getEntity(), mxObject.getGuid());
-		if (onClickEvent === "callMicroflow" && microflow && mxObject.getGuid()) {
-			window.mx.ui.action(microflow, {
-				error: (error) => window.mx.ui.error(`Error while executing microflow: ${microflow}: ${error.message}`),
-				params: {
-					applyto: "selection",
-					guids: [ mxObject.getGuid() ]
-				}
-			});
-		} else if (onClickEvent === "showPage" && page && mxObject.getGuid()) {
-			window.mx.ui.openForm(page, {
-				context,
-				error: (error) => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
-			});
-		}
-	}
+    private handleOnClick() {
+        const { mxObject, onClickEvent, microflow, page } = this.props;
+        if (!mxObject || !mxObject.getGuid()) {
+            return;
+        }
+        const context = new mendix.lib.MxContext();
+        context.setContext(mxObject.getEntity(), mxObject.getGuid());
+        if (onClickEvent === "callMicroflow" && microflow && mxObject.getGuid()) {
+            window.mx.ui.action(microflow, {
+                error: (error) => window.mx.ui.error(`Error while executing microflow: ${microflow}: ${error.message}`),
+                params: {
+                    applyto: "selection",
+                    guids: [ mxObject.getGuid() ]
+                }
+            });
+        } else if (onClickEvent === "showPage" && page && mxObject.getGuid()) {
+            window.mx.ui.openForm(page, {
+                context,
+                error: (error) => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
+            });
+        }
+    }
 }

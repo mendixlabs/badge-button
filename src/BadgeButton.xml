@@ -12,8 +12,21 @@
             <caption>Label</caption>
             <category>Display</category>
             <description>The label to display before the badge/label</description>
+            <translations>
+                <translation lang="en_US"></translation>
+                <translation lang="nl_NL"></translation>
+            </translations>
         </property>
-        <property key="badgeClass" type="enumeration" defaultValue="default">
+        <property key="badgeButtonValue" type="translatableString" required="false">
+            <caption>Data</caption>
+            <category>Display</category>
+            <description>The value to display before the badge/label</description>
+            <translations>
+                <translation lang="en_US"></translation>
+                <translation lang="nl_NL"></translation>
+            </translations>
+        </property>
+        <property key="badgeStyle" type="enumeration" defaultValue="default">
             <caption>Style</caption>
             <category>Display</category>
             <description>The styling and color of the badge/label using Bootstrap classes</description>
@@ -44,7 +57,7 @@
                 <attributeType name="String" />
             </attributeTypes>
         </property>
-        <property key="valueAttribute" type="attribute">
+        <property key="valueAttribute" type="attribute" required="false">
             <caption>Data attribute</caption>
             <category>Data source</category>
             <description>The attribute that contains the label/badge value</description>
