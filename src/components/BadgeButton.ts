@@ -1,12 +1,9 @@
 import { DOM, createElement } from "react";
 import * as classNames from "classnames";
 
-import { Alert } from "./Alert";
-
 import "../ui/BadgeButton.css";
 
 export interface BadgeButtonProps {
-    alertMessage?: string;
     label?: string;
     value?: string;
     style?: string;
@@ -21,6 +18,5 @@ export const BadgeButton = (props: BadgeButtonProps) =>
             onClick: props.onClickAction
         },
         DOM.span({ className: "widget-badge-button-text" }, props.label),
-        DOM.span({ className: "badge" }, props.value),
-        createElement(Alert, { message: props.alertMessage })
+        DOM.span({ className: "badge" }, props.value)
     );

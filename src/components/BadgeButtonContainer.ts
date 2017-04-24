@@ -20,7 +20,6 @@ interface BadgeButtonContainerState {
     alertMessage?: string;
     value: string;
     label: string;
-    showAlert?: boolean;
     style: string;
 }
 
@@ -35,7 +34,6 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         this.state = {
             alertMessage: this.validateProps(),
             label: this.getValue(props.mxObject, props.labelAttribute, this.props.label),
-            showAlert: !!this.validateProps(),
             style: this.getValue(props.mxObject, props.styleAttribute, props.badgeStyle),
             value: this.getValue(props.mxObject, props.valueAttribute, props.badgeButtonValue)
         };
@@ -44,12 +42,11 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     }
 
     render() {
-        if (this.state.showAlert) {
+        if (this.state.alertMessage) {
             return createElement(Alert, { message: this.state.alertMessage });
         }
 
         return createElement(BadgeButton, {
-            alertMessage: this.state.alertMessage,
             clickable: this.props.microflow,
             label: this.state.label,
             onClickAction: this.handleOnClick,
@@ -75,7 +72,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         });
     }
 
-    private getValue(mxObject: mendix.lib.MxObject, attributeName: string, defaultValue: string) {
+    private getValue(mxObject: mendix.lib.MxObject, attributeName: string, defaultValue: string): string {
         if (mxObject) {
             return mxObject.get(attributeName) as string || defaultValue;
         }
@@ -104,15 +101,15 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     private validateProps(): string {
         let errorMessage = "";
         if (this.props.onClickEvent === "callMicroflow" && !this.props.microflow) {
-            errorMessage = "on click microflow is required";
+            errorMessage = "A 'Microflow' is required for 'Events' 'Call a microflow'";
         } else if (this.props.onClickEvent === "showPage" && !this.props.page) {
-            errorMessage = "on click page is required";
+            errorMessage = "A 'Page' is required for 'Events' 'Show a page'";
         }
         if (errorMessage) {
             errorMessage = `Error in badge button configuration: ${errorMessage}`;
         }
 
-        return errorMessage && `Error in badge button configuration: ${errorMessage}`;
+        return errorMessage;
     }
 
     private handleOnClick() {
