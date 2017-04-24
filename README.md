@@ -1,21 +1,17 @@
 ## Badge button
 
-Badge button is a special distinctive mark or token put on any display as a button
+A special distinctive mark or token put on any display as a button
 
 ## Features
 
  * Display a badge on a button.
  * Attach an onclick microflow 
  * Set a static label text when the persisted label is empty or not specified
+ * Set static data when the persisted data is empty or not specified
 
 ## Dependencies
 
 Mendix 7.1
-
-## How it Works
-When displaying badge button, the widget will prioritize context data specified in `Data source` tab data over static data specified in `Display` tab.
-That is to say the widget label will show data from `Data source` tab over that from `Display` tab.
-Likewise the widget value will show data from `Data source` tab over that from `Display` tab.
 
 ## Demo project
 
@@ -24,8 +20,9 @@ Likewise the widget value will show data from `Data source` tab over that from `
 <img src="./assets/demo.png" width="900px" height="400px" />
 
 ## Usage
+Place the widget in the context of an object that has a label attribute, value attribute and bootstrap style attribute.
 
-Place the widget in the context of an object that has attributes for data, label and style
+The data source attributes specified in the `Data source` tab are optional. If not set, static data should be specified in the `Display` tab.
 
 <img src="./assets/Static_attributes.png" width="600px" height="300px" />
 <img src="./assets/Data_source.png" width="600px" height="300px" />
