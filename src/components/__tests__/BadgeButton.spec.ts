@@ -3,7 +3,6 @@ import { DOM, createElement } from "react";
 import * as classNames from "classnames";
 
 import { BadgeButton, BadgeButtonProps } from "../BadgeButton";
-import { Alert } from "../Alert";
 
 describe("BadgeButton", () => {
     const createBadgeButton = (props: BadgeButtonProps) => shallow(createElement(BadgeButton, props));
@@ -25,8 +24,7 @@ describe("BadgeButton", () => {
                     onClick: jasmine.any(Function) as any
                 },
                 DOM.span({ className: "widget-badge-button-text" }, badgeProps.label),
-                DOM.span({ className: "badge" }, badgeProps.value),
-                createElement(Alert)
+                DOM.span({ className: "badge" }, badgeProps.value)
             )
         );
     });
