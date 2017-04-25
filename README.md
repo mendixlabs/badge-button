@@ -6,8 +6,8 @@ A special distinctive mark or token put on any display as a button
 
  * Display a badge on a button.
  * Attach an onclick microflow 
- * Set a static label text when the persisted label is empty or not specified
- * Set static data when the persisted data is empty or not specified
+ * Set a static label text when the persisted label is not specified
+ * Set static data when the persisted data is not specified
 
 ## Dependencies
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <widget id="com.mendix.widget.custom.badgebutton.BadgeButton" needsEntityContext="true" offlineCapable="true" xmlns="http://www.mendix.com/widget/1.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../xsd/widget.xsd">
     <name>Badge button</name>
-    <description>Badge buttons are numerical indicators of how many items are associated with a link</description>
+    <description>A special distinctive mark or token put on any display as a button</description>
     <icon/>
     <properties>
         <property key="label" type="translatableString" required="false">

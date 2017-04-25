@@ -51,6 +51,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
 
         return createElement(BadgeButton, {
             bootstrapStyle: this.state.bootstrapStyle as BootstrapStyle,
+            className: this.props.class,
             clickable: this.props.microflow,
             label: this.state.label,
             onClickAction: this.handleOnClick,
@@ -80,6 +81,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         if (mxObject) {
             return mxObject.get(attributeName) as string || defaultValue;
         }
+
         return defaultValue;
     }
 
