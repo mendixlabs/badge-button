@@ -52,7 +52,6 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         return createElement(BadgeButton, {
             bootstrapStyle: this.state.bootstrapStyle as BootstrapStyle,
             className: this.props.class,
-            clickable: this.props.microflow,
             label: this.state.label,
             onClickAction: this.handleOnClick,
             style: BadgeButtonContainer.parseStyle(this.props.style),

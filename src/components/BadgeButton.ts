@@ -9,7 +9,6 @@ export interface BadgeButtonProps {
     label?: string;
     value?: string;
     bootstrapStyle?: BootstrapStyle;
-    clickable?: string;
     onClickAction?: () => void;
 }
 
