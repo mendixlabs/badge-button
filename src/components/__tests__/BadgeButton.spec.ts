@@ -31,52 +31,45 @@ describe("BadgeButton", () => {
 
     it("with a click action should respond to click events", () => {
         const badgeProps: BadgeButtonProps = { onClickAction: jasmine.createSpy("onClick") };
-        const onClick = badgeProps.onClickAction = jasmine.createSpy("onClick");
         const badge = createBadgeButton(badgeProps);
 
         badge.simulate("click");
 
-        expect(onClick).toHaveBeenCalled();
+        expect(badgeProps.onClickAction).toHaveBeenCalled();
     });
 
-    it("with bootstrap style default should have the class btn-default", () => {
-        const badgeProps: BadgeButtonProps = { bootstrapStyle: "default" };
-        const badgeComponent = createBadgeButton(badgeProps);
+    it("with the bootstrap style default should have the class btn-default", () => {
+        const badgeComponent = createBadgeButton({ bootstrapStyle: "default" });
 
         expect(badgeComponent.hasClass("btn-default")).toBe(true);
     });
 
-    it("with bootstrap style primary should have the class btn-primary", () => {
-        const badgeProps: BadgeButtonProps = { bootstrapStyle: "primary" };
-        const badgeComponent = createBadgeButton(badgeProps);
+    it("with the bootstrap style primary should have the class btn-primary", () => {
+        const badgeComponent = createBadgeButton({ bootstrapStyle: "primary" });
 
         expect(badgeComponent.hasClass("btn-primary")).toBe(true);
     });
 
-    it("with bootstrap style success should have the class btn-success", () => {
-        const badgeProps: BadgeButtonProps = { bootstrapStyle: "success" };
-        const badgeComponent = createBadgeButton(badgeProps);
+    it("with the bootstrap style success should have the class btn-success", () => {
+        const badgeComponent = createBadgeButton({ bootstrapStyle: "success" });
 
         expect(badgeComponent.hasClass("btn-success")).toBe(true);
     });
 
-    it("with bootstrap style info should have the class btn-info", () => {
-        const badgeProps: BadgeButtonProps = { bootstrapStyle: "info" };
-        const badgeComponent = createBadgeButton(badgeProps);
+    it("with the bootstrap style info should have the class btn-info", () => {
+        const badgeComponent = createBadgeButton({ bootstrapStyle: "info" });
 
         expect(badgeComponent.hasClass("btn-info")).toBe(true);
     });
 
-    it("with bootstrap style warning should have the class btn-warning", () => {
-        const badgeProps: BadgeButtonProps = { bootstrapStyle: "warning" };
-        const badgeComponent = createBadgeButton(badgeProps);
+    it("with the bootstrap style warning should have the class btn-warning", () => {
+        const badgeComponent = createBadgeButton({ bootstrapStyle: "warning" });
 
         expect(badgeComponent.hasClass("btn-warning")).toBe(true);
     });
 
-    it("with bootstrap style danger should have the class btn-danger", () => {
-        const badgeProps: BadgeButtonProps = { bootstrapStyle: "danger" };
-        const badgeComponent = createBadgeButton(badgeProps);
+    it("with the bootstrap style danger should have the class btn-danger", () => {
+        const badgeComponent = createBadgeButton({ bootstrapStyle: "danger" });
 
         expect(badgeComponent.hasClass("btn-danger")).toBe(true);
     });
