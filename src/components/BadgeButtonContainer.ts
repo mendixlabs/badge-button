@@ -5,7 +5,7 @@ import { Alert } from "./Alert";
 
 interface WrapperProps {
     class?: string;
-    mxObject: mendix.lib.MxObject;
+    mxObject?: mendix.lib.MxObject;
     style?: string;
 }
 
@@ -36,9 +36,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     constructor(props: BadgeButtonContainerProps) {
         super(props);
 
-        const defaultState = this.updateValues(props.mxObject);
-        defaultState.alertMessage = this.validateProps();
-        this.state = defaultState;
+        this.state = this.updateValues(props.mxObject);
         this.subscriptionHandles = [];
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handleSubscriptions = this.handleSubscriptions.bind(this);
@@ -70,13 +68,14 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
 
     private updateValues(mxObject = this.props.mxObject): BadgeButtonContainerState {
         return({
-            bootstrapStyle: this.getValue(mxObject, this.props.bootstrapStyleAttribute, this.props.bootstrapStyle),
-            label: this.getValue(mxObject, this.props.labelAttribute, this.props.label),
-            value: this.getValue(mxObject, this.props.valueAttribute, this.props.badgeButtonValue)
+            alertMessage: this.validateProps(),
+            bootstrapStyle: this.getValue(this.props.bootstrapStyleAttribute, this.props.bootstrapStyle, mxObject),
+            label: this.getValue(this.props.labelAttribute, this.props.label, mxObject),
+            value: this.getValue(this.props.valueAttribute, this.props.badgeButtonValue, mxObject)
         });
     }
 
-    private getValue<T>(mxObject: mendix.lib.MxObject, attributeName: string, defaultValue: T): string | T {
+    private getValue<T>(attributeName: string, defaultValue: T, mxObject?: mendix.lib.MxObject ): string | T {
         if (mxObject) {
             return mxObject.get(attributeName) as string || defaultValue;
         }
@@ -84,8 +83,9 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         return defaultValue;
     }
 
-    private resetSubscriptions(mxObject: mendix.lib.MxObject) {
+    private resetSubscriptions(mxObject?: mendix.lib.MxObject) {
         this.subscriptionHandles.forEach(window.mx.data.unsubscribe);
+        this.subscriptionHandles = [];
 
         if (mxObject) {
             this.subscriptionHandles.push(window.mx.data.subscribe({
@@ -148,9 +148,9 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         }
     }
 
-    private static parseStyle(style = ""): {[key: string]: string} {
+    private static parseStyle(style = ""): { [key: string]: string } {
         try {
-            return style.split(";").reduce<{[key: string]: string}>((styleObject, line) => {
+            return style.split(";").reduce<{ [key: string]: string }>((styleObject, line) => {
                 const pair = line.split(":");
                 if (pair.length === 2) {
                     const name = pair[0].trim().replace(/(-.)/g, match => match[1].toUpperCase());
