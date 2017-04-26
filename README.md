@@ -1,4 +1,4 @@
-## Badge button
+## Badge Button
 
 A special distinctive mark or token put on any display as a button
 
@@ -48,9 +48,9 @@ To set up the development environment, run:
 
 Create a folder named dist in the project root.
 
-Create a Mendix test project in the dist folder and rename its root folder to MxTestProject. Changes to the widget code shall be automatically pushed to this test project.
+Create a Mendix test project in the dist folder and rename its root folder to `dist/MxTestProject`. Changes to the widget code shall be automatically pushed to this test project.
 
-    dist/MxTestProject
+[https://github.com/MendixLabs/badge-button/releases/download/v1.0.0/Badge.mpr](https://github.com/MendixLabs/badge-button/releases/download/v1.0.0/Badge.mpr)
 
 To automatically compile, bundle and push code changes to the running test project, run:
 
