@@ -35,15 +35,6 @@
                 <enumerationValue key="danger">Danger</enumerationValue>
             </enumerationValues>
         </property>
-        <property key="bootstrapStyleAttribute" type="attribute" required="false">
-            <caption>Bootstrap style attribute</caption>
-            <category>Data source</category>
-            <description>The attribute value should be: default, primary, info, warning, danger, success.</description>
-            <attributeTypes>
-                <attributeType name="Enum" />
-                <attributeType name="String" />
-            </attributeTypes>
-        </property>
         <property key="labelAttribute" type="attribute" required="false">
             <caption>Label attribute</caption>
             <category>Data source</category>
@@ -62,6 +53,15 @@
                 <attributeType name="Integer" />
                 <attributeType name="Decimal" />
                 <attributeType name="Long" />
+            </attributeTypes>
+        </property>
+        <property key="bootstrapStyleAttribute" type="attribute" required="false">
+            <caption>Bootstrap style attribute</caption>
+            <category>Data source</category>
+            <description>The attribute value should be: default, primary, info, warning, danger, success.</description>
+            <attributeTypes>
+                <attributeType name="Enum" />
+                <attributeType name="String" />
             </attributeTypes>
         </property>
         <property key="onClickEvent" type="enumeration" defaultValue="doNothing">
