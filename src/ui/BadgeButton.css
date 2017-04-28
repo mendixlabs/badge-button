@@ -1,3 +1,7 @@
+.widget-badge-button-wrapper {
+    display: inline-block;
+}
+
 .widget-badge-button {
     display: inline-block;
 }
