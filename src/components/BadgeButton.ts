@@ -18,7 +18,7 @@ type BootstrapStyle = "default" | "info" | "primary" | "danger" | "success" | "w
 const BadgeButton: SFC<BadgeButtonProps> = (props) =>
     DOM.button(
         {
-            className: classNames("widget-badge-button btn", {
+            className: classNames("widget-badge-button btn", props.className, {
                 [`btn-${props.bootstrapStyle}`]: !!props.bootstrapStyle
             }),
             onClick: props.onClickAction,
