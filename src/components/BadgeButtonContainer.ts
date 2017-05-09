@@ -9,12 +9,12 @@ interface WrapperProps {
     style?: string;
 }
 
-interface BadgeButtonContainerProps extends WrapperProps {
+export interface BadgeButtonContainerProps extends WrapperProps {
     valueAttribute: string;
     bootstrapStyleAttribute: string;
     labelAttribute: string;
     label: string;
-    bootstrapStyle: string;
+    bootstrapStyle: BootstrapStyle;
     badgeButtonValue: string;
     microflow: string;
     onClickEvent: OnClickOptions;
@@ -162,7 +162,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         }
     }
 
-    private static parseStyle(style = ""): { [key: string]: string } {
+    public static parseStyle(style = ""): { [key: string]: string } {
         try {
             return style.split(";").reduce<{ [key: string]: string }>((styleObject, line) => {
                 const pair = line.split(":");
