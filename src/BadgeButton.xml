@@ -5,7 +5,7 @@
     <icon>iVBORw0KGgoAAAANSUhEUgAAABAAAAAKCAYAAAC9vt6cAAAAAXNSR0IArs4c6QAAAPRJREFUKBWVkjsOgkAQhneXRbMaC0JobUQSezshHIIDeBWuQ2Fna0GCnQ2VlUdAChLeD2dIthXYZB/J/t/8MztLfd9fEULOfd8fGGMCzpMDtAVoPyB88aZpzrZtX13X9YQQ+iQNgqIokjAMb1EUEVaW5dFxHE9VVb1tWzJnohYZZDksGwnPcZcaZJDldV3TrutGZ3k5Z+ecE2Q51MPgHRYHGIYB34LxPM/HDDDIkkEpJchiBmWWZQm0ZVYHpElVVQmyimEYO6hla1nWHtooFEUhUxOcv0EQ3OM4flDTNNdpml4ggxOktZEO/3aoP4fP9NY07fkDDhiYU+BVvmwAAAAASUVORK5CYII=</icon>
     <properties>
         <property key="label" type="translatableString" required="false">
-            <caption>Label</caption>
+            <caption>Caption</caption>
             <category>Display</category>
             <description>The badge label</description>
             <translations>
@@ -36,7 +36,7 @@
             </enumerationValues>
         </property>
         <property key="labelAttribute" type="attribute" required="false">
-            <caption>Label attribute</caption>
+            <caption>Caption attribute</caption>
             <category>Data source</category>
             <description>The attribute that contains the badge button label</description>
             <attributeTypes>
