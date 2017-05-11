@@ -5,7 +5,6 @@ import BadgeButtonContainer, { BadgeButtonContainerProps } from "./components/Ba
 declare function require(name: string): string;
 
 export class preview extends Component<BadgeButtonContainerProps, {}> {
-
     componentWillMount() {
         // This workaround is to load style in the preview temporary till mendix has a better solution
         const css = require("./ui/BadgeButton.css");
@@ -27,7 +26,7 @@ export class preview extends Component<BadgeButtonContainerProps, {}> {
         return {
             bootstrapStyle: props.bootstrapStyle,
             className: props.class,
-            label: props.label || "[" + props.labelAttribute + "]",
+            label: props.label,
             style: BadgeButtonContainer.parseStyle(props.style),
             value: props.badgeButtonValue || "[" + props.valueAttribute + "]"
         };
