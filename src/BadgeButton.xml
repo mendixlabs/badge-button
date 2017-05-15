@@ -6,7 +6,7 @@
     <properties>
         <property key="label" type="translatableString" required="false">
             <caption>Caption</caption>
-            <category>Display</category>
+            <category>Button</category>
             <description>The caption of the button</description>
             <translations>
                 <translation lang="en_US"></translation>
@@ -14,8 +14,8 @@
             </translations>
         </property>
         <property key="bootstrapStyle" type="enumeration" defaultValue="default">
-            <caption>Bootstrap style</caption>
-            <category>Display</category>
+            <caption>Button style</caption>
+            <category>Button</category>
             <description>The appearance of the badge button</description>
             <enumerationValues>
                 <enumerationValue key="default">Default</enumerationValue>
@@ -28,12 +28,12 @@
         </property>
         <property key="badgeButtonValue" type="translatableString" required="false">
             <caption>Default value</caption>
-            <category>Display</category>
+            <category>Button</category>
             <description>The badge value</description>
         </property>
         <property key="valueAttribute" type="attribute" required="false">
             <caption>Badge value attribute</caption>
-            <category>Data source</category>
+            <category>Badge</category>
             <description>The attribute that contains the badge button value</description>
             <attributeTypes>
                 <attributeType name="String" />
