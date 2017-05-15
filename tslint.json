@@ -14,6 +14,10 @@
       true,
       "spaces"
     ],
+    "linebreak-style": [ 
+      true,
+       "LF"
+    ],
     "member-ordering": [
       true,
       "variables-before-functions"
@@ -145,6 +149,7 @@
       false
     ],
     "object-literal-sort-keys": false,
+    "linebreak-style": [ true, "LF" ],
     "array-bracket-spacing": [
       true,
       "always"
