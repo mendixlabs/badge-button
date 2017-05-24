@@ -33,9 +33,10 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     constructor(props: BadgeButtonContainerProps) {
         super(props);
 
-        const defaultState = this.updateValues(props.mxObject);
-        defaultState.alertMessage = BadgeButtonContainer.validateProps(this.props);
-        this.state = defaultState;
+        this.state = {
+            alertMessage: BadgeButtonContainer.validateProps(this.props),
+            value: this.getValue(this.props.valueAttribute, this.props.mxObject)
+        };
         this.subscriptionHandles = [];
         this.handleOnClick = this.handleOnClick.bind(this);
         this.handleSubscriptions = this.handleSubscriptions.bind(this);
@@ -50,6 +51,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         return createElement(BadgeButton, {
             bootstrapStyle: this.props.bootstrapStyle,
             className: this.props.class,
+            defaultValue: this.props.badgeButtonValue,
             getRef: this.setBadgeButtonReference,
             label: this.props.label,
             onClickAction: this.handleOnClick,
@@ -66,7 +68,9 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
 
     componentWillReceiveProps(newProps: BadgeButtonContainerProps) {
         this.resetSubscriptions(newProps.mxObject);
-        this.setState(this.updateValues(newProps.mxObject));
+        this.setState({
+            value: this.getValue(this.props.valueAttribute, newProps.mxObject)
+        });
     }
 
     componentWillUnmount() {
@@ -87,9 +91,9 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         return errorMessage;
     }
 
-    public static parseStyle(style = ""): { [key: string]: string } {
+    public static parseStyle(style = ""): {[key: string]: string} {
         try {
-            return style.split(";").reduce<{ [key: string]: string }>((styleObject, line) => {
+            return style.split(";").reduce<{[key: string]: string}>((styleObject, line) => {
                 const pair = line.split(":");
                 if (pair.length === 2) {
                     const name = pair[0].trim().replace(/(-.)/g, match => match[1].toUpperCase());
@@ -98,7 +102,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
                 return styleObject;
             }, {});
         } catch (error) {
-            // tslint:disable no-console
+            // tslint:disable-next-line no-console
             console.log("Failed to parse style", style, error);
         }
 
@@ -109,19 +113,16 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         this.badgeButton = ref;
     }
 
-    private updateValues(mxObject = this.props.mxObject): BadgeButtonContainerState {
-        return({
-            value: this.getValue(this.props.valueAttribute, this.props.badgeButtonValue, mxObject)
-        });
-    }
-
-    private getValue<T>(attributeName: string, defaultValue: T, mxObject?: mendix.lib.MxObject ): string | T {
+    private getValue(attributeName: string, mxObject?: mendix.lib.MxObject): string {
         if (mxObject && attributeName) {
             const value = mxObject.get(attributeName);
-            return value ? value.toString() : defaultValue;
+            if (mxObject.isEnum(attributeName)) {
+                return mxObject.getEnumCaption(attributeName, value as string);
+            }
+            return value.toString();
         }
 
-        return defaultValue;
+        return "";
     }
 
     private resetSubscriptions(mxObject?: mendix.lib.MxObject) {
@@ -143,7 +144,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
 
     private handleSubscriptions() {
         this.setState({
-            value: this.getValue(this.props.valueAttribute, this.props.badgeButtonValue, this.props.mxObject)
+            value: this.getValue(this.props.valueAttribute, this.props.mxObject)
         });
     }
 

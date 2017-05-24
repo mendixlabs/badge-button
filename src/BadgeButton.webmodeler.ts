@@ -35,7 +35,7 @@ export class preview extends Component<BadgeButtonContainerProps, {}> {
             className: props.class,
             label: props.label,
             style: BadgeButtonContainer.parseStyle(props.style),
-            value: (valueAttributeArray ? "[" + valueAttributeArray + "]" : "") || props.badgeButtonValue
+            value: valueAttributeArray ? "[" + valueAttributeArray + "]" : props.badgeButtonValue
         };
     }
 
