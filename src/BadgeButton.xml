@@ -32,6 +32,7 @@
             <description>The attribute that contains the badge button value</description>
             <attributeTypes>
                 <attributeType name="String" />
+                <attributeType name="Enum" />
                 <attributeType name="Integer" />
                 <attributeType name="Decimal" />
                 <attributeType name="Long" />
