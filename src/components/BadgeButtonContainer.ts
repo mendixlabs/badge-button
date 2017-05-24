@@ -34,7 +34,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         super(props);
 
         const defaultState = this.updateValues(props.mxObject);
-        defaultState.alertMessage = this.validateProps();
+        defaultState.alertMessage = BadgeButtonContainer.validateProps(this.props);
         this.state = defaultState;
         this.subscriptionHandles = [];
         this.handleOnClick = this.handleOnClick.bind(this);
@@ -71,6 +71,38 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
 
     componentWillUnmount() {
         this.subscriptionHandles.forEach(window.mx.data.unsubscribe);
+    }
+
+    public static validateProps(props: BadgeButtonContainerProps): string {
+        let errorMessage = "";
+        if (props.onClickEvent === "callMicroflow" && !props.microflow) {
+            errorMessage = "A 'Microflow' is required for 'Events' 'Call a microflow'";
+        } else if (props.onClickEvent === "showPage" && !props.page) {
+            errorMessage = "A 'Page' is required for 'Events' 'Show a page'";
+        }
+        if (errorMessage) {
+            errorMessage = `Error in badge button configuration: ${errorMessage}`;
+        }
+
+        return errorMessage;
+    }
+
+    public static parseStyle(style = ""): { [key: string]: string } {
+        try {
+            return style.split(";").reduce<{ [key: string]: string }>((styleObject, line) => {
+                const pair = line.split(":");
+                if (pair.length === 2) {
+                    const name = pair[0].trim().replace(/(-.)/g, match => match[1].toUpperCase());
+                    styleObject[name] = pair[1].trim();
+                }
+                return styleObject;
+            }, {});
+        } catch (error) {
+            // tslint:disable no-console
+            console.log("Failed to parse style", style, error);
+        }
+
+        return {};
     }
 
     private setBadgeButtonReference(ref: HTMLButtonElement) {
@@ -115,20 +147,6 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         });
     }
 
-    private validateProps(): string {
-        let errorMessage = "";
-        if (this.props.onClickEvent === "callMicroflow" && !this.props.microflow) {
-            errorMessage = "A 'Microflow' is required for 'Events' 'Call a microflow'";
-        } else if (this.props.onClickEvent === "showPage" && !this.props.page) {
-            errorMessage = "A 'Page' is required for 'Events' 'Show a page'";
-        }
-        if (errorMessage) {
-            errorMessage = `Error in badge button configuration: ${errorMessage}`;
-        }
-
-        return errorMessage;
-    }
-
     private handleOnClick() {
         const { mxObject, onClickEvent, microflow, page } = this.props;
         if (!mxObject || !mxObject.getGuid()) {
@@ -150,23 +168,5 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
                 error: (error) => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
             });
         }
-    }
-
-    public static parseStyle(style = ""): { [key: string]: string } {
-        try {
-            return style.split(";").reduce<{ [key: string]: string }>((styleObject, line) => {
-                const pair = line.split(":");
-                if (pair.length === 2) {
-                    const name = pair[0].trim().replace(/(-.)/g, match => match[1].toUpperCase());
-                    styleObject[name] = pair[1].trim();
-                }
-                return styleObject;
-            }, {});
-        } catch (error) {
-            // tslint:disable no-console
-            console.log("Failed to parse style", style, error);
-        }
-
-        return {};
     }
 }

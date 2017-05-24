@@ -20,9 +20,9 @@ export const Overlay: SFC<{ myRef: (node: HTMLElement) => void }> = ({ children,
         })
     );
 
-const preventEvent = (e: SyntheticEvent<any>) => {
-    e.preventDefault();
-    e.stopPropagation();
+const preventEvent = (event: SyntheticEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
 };
 
 Overlay.displayName = "Overlay";

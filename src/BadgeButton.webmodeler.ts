@@ -1,6 +1,7 @@
 import { Component, createElement } from "react";
 import { BadgeButton, BadgeButtonProps } from "./components/BadgeButton";
 import { Overlay } from "./components/Overlay";
+import { Alert } from "./components/Alert";
 import BadgeButtonContainer, { BadgeButtonContainerProps } from "./components/BadgeButtonContainer";
 
 declare function require(name: string): string;
@@ -14,7 +15,9 @@ export class preview extends Component<BadgeButtonContainerProps, {}> {
     }
 
     render() {
+        const message = BadgeButtonContainer.validateProps(this.props);
         return createElement(Overlay, { myRef: this.parentInline },
+            message && Alert(message),
             createElement(BadgeButton, this.transformProps(this.props))
         );
     }
