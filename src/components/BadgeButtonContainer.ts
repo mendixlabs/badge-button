@@ -62,6 +62,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
 
     componentDidMount() {
         if (this.badgeButton && this.badgeButton.parentElement) {
+            // Add class in container element to enable the wrapper to be inline
             this.badgeButton.parentElement.classList.add("widget-badge-button-wrapper");
         }
     }
@@ -155,18 +156,18 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         }
         const context = new mendix.lib.MxContext();
         context.setContext(mxObject.getEntity(), mxObject.getGuid());
-        if (onClickEvent === "callMicroflow" && microflow && mxObject.getGuid()) {
+        if (onClickEvent === "callMicroflow" && microflow) {
             window.mx.ui.action(microflow, {
-                error: (error) => window.mx.ui.error(`Error while executing microflow: ${microflow}: ${error.message}`),
+                error: error => window.mx.ui.error(`Error while executing microflow: ${microflow}: ${error.message}`),
                 params: {
                     applyto: "selection",
                     guids: [ mxObject.getGuid() ]
                 }
             });
-        } else if (onClickEvent === "showPage" && page && mxObject.getGuid()) {
+        } else if (onClickEvent === "showPage" && page) {
             window.mx.ui.openForm(page, {
                 context,
-                error: (error) => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
+                error: error => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
             });
         }
     }

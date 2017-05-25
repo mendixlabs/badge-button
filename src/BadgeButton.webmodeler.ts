@@ -1,4 +1,4 @@
-import { Component, DOM, createElement } from "react";
+import { Component, createElement } from "react";
 import { BadgeButton, BadgeButtonProps } from "./components/BadgeButton";
 import { Overlay } from "./components/Overlay";
 import { Alert } from "./components/Alert";
@@ -16,19 +16,11 @@ export class preview extends Component<BadgeButtonContainerProps, {}> {
 
     render() {
         const message = BadgeButtonContainer.validateProps(this.props);
-        if (!message) {
-            return createElement(Overlay, { myRef: this.parentInline },
-                createElement(BadgeButton, this.transformProps(this.props))
-            );
-        } else {
-            return DOM.div({},
-                createElement(Alert, { message }),
-                createElement(Overlay, { myRef: this.parentInline },
-                    createElement(BadgeButton, this.transformProps(this.props))
-                )
-            );
-        }
 
+        return createElement(Overlay, { myRef: this.parentInline },
+            createElement(Alert, { message }),
+            createElement(BadgeButton, this.transformProps(this.props))
+        );
     }
 
     private parentInline(node?: HTMLElement) {
