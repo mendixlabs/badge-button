@@ -1,7 +1,7 @@
 {
   "name": "badgebutton",
   "widgetName": "BadgeButton",
-  "version": "2.0.0",
+  "version": "1.0.1",
   "description": "A special distinctive mark or token put on any display as a button",
   "scripts": {
     "pretest": "tsc",
