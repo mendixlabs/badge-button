@@ -32,9 +32,9 @@ export class preview extends Component<BadgeButtonContainerProps, {}> {
         return {
             bootstrapStyle: props.bootstrapStyle,
             className: props.class,
-            label: props.label || "Button",
+            label: props.label,
             style: BadgeButtonContainer.parseStyle(props.style),
-            value: valueAttributeArray ? "[" + valueAttributeArray + "]" : props.badgeButtonValue || "Badge"
+            value: valueAttributeArray ? "[" + valueAttributeArray + "]" : props.badgeButtonValue
         };
     }
 }
