@@ -1,12 +1,12 @@
-import { DOM, SFC, SyntheticEvent } from "react";
+import { SFC, SyntheticEvent, createElement } from "react";
 
 export const Overlay: SFC<{ myRef: (node: HTMLElement) => void }> = ({ children, myRef }) =>
-    DOM.div({
-            ref: (node) => myRef(node),
+    createElement("div", {
+            ref: (node: HTMLElement) => myRef(node),
             style: { position: "relative" }
         },
         children,
-        DOM.div({
+        createElement("div", {
             onClick: preventEvent,
             onTouchStart: preventEvent,
             style: {
@@ -20,7 +20,7 @@ export const Overlay: SFC<{ myRef: (node: HTMLElement) => void }> = ({ children,
         })
     );
 
-const preventEvent = (event: SyntheticEvent<HTMLDivElement>) => {
+const preventEvent = <T extends SyntheticEvent<any>>(event: T) => {
     event.preventDefault();
     event.stopPropagation();
 };
