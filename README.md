@@ -16,15 +16,15 @@ Mendix 7.2
 
 [https://badgebutton.mxapps.io/](https://badgebutton.mxapps.io/)
 
-![1](https://raw.githubusercontent.com/mendixlabs/badge-button/v1.1.1/assets/demo.png)
+![Demo](/assets/demo.png)
 ## Usage
 Place the widget in the context of an object that has a value attribute.
 
 The data source attribute specified in the `Badge` tab is optional. If not set, static data should be specified in the `Button` tab.
 
-![1](https://raw.githubusercontent.com/mendixlabs/badge-button/v1.1.1/assets/Static_attributes.png)
-![1](https://raw.githubusercontent.com/mendixlabs/badge-button/v1.1.1/assets/Data_source.png)
-![1](https://raw.githubusercontent.com/mendixlabs/badge-button/v1.1.1/assets/Behavior.png)
+![Static attributes](/assets/Static_attributes.png)
+![Data source](/assets/Data_source.png)
+![Behavior](/assets/Behavior.png)
 
 ## Issues, suggestions and feature requests
 

@@ -6,7 +6,11 @@ import { Alert } from "../Alert";
 describe("Alert", () => {
     it("renders the structure when an alert message is specified", () => {
         const message = "This is an error";
-        const alert = shallow(createElement(Alert, { message }));
+        const alert = shallow(createElement(Alert, {
+            bootstrapStyle: "danger",
+            className: "widget-badge-button",
+            message
+        }));
 
         expect(alert).toBeElement(
             createElement("div", { className: "alert alert-danger widget-badge-button" }, message)
