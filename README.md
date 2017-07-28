@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/mendixlabs/badge-button.svg?branch=master)](https://travis-ci.org/mendixlabs/badge-button)
+[![Dependency Status](https://david-dm.org/mendixlabs/badge-button.svg)](https://david-dm.org/mendixlabs/badge-button)
+[![Dev Dependency Status](https://david-dm.org/mendixlabs/badge-button.svg#info=devDependencies)](https://david-dm.org/mendixlabs/badge-button#info=devDependencies)
+[![codecov](https://codecov.io/gh/mendixlabs/badge-button/branch/master/graph/badge.svg)](https://codecov.io/gh/mendixlabs/badge-button)
+
 ## Badge Button
 
 A special distinctive mark or token put on any display as a button
