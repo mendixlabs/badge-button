@@ -14,7 +14,7 @@ export class preview extends Component<BadgeButtonContainerProps, {}> {
     render() {
         const message = BadgeButtonContainer.validateProps(this.props);
         return createElement("div", { ref: this.parentInline },
-            message && Alert({ bootstrapStyle: "danger", message }),
+            createElement(Alert, { bootstrapStyle: "danger", className: "widget-badge-button-alert", message }),
             createElement(BadgeButton, this.transformProps(this.props))
         );
     }
