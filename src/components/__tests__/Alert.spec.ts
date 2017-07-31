@@ -6,11 +6,15 @@ import { Alert, AlertProps } from "../Alert";
 describe("Alert", () => {
     const message = "This is an error";
     const renderAlert = (props: AlertProps) => shallow(createElement(Alert, props));
-    const defaultProps: AlertProps = {
-        bootstrapStyle: "danger",
-        className: "widget-badge-button",
-        message
-    };
+    let defaultProps: AlertProps;
+
+    beforeEach(() => {
+        defaultProps = {
+            bootstrapStyle: "danger",
+            className: "widget-badge-button",
+            message
+        };
+    });
 
     it("renders the structure when an alert message is specified", () => {
         const alert = renderAlert(defaultProps);
@@ -21,7 +25,7 @@ describe("Alert", () => {
     });
 
     it("renders no structure when the alert message is not specified", () => {
-        const alert = shallow(createElement(Alert));
+        const alert = renderAlert({ bootstrapStyle: "danger" });
 
         expect(alert).toBeElement(null);
     });
