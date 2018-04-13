@@ -16,9 +16,14 @@ export interface BadgeButtonContainerProps extends WrapperProps {
     bootstrapStyle: BootstrapStyle;
     badgeButtonValue: string;
     microflow: string;
-    nanoflow: string;
+    nanoflow: Nanoflow;
     onClickEvent: OnClickOptions;
     page: string;
+}
+
+interface Nanoflow {
+    nanoflow: object[];
+    paramsSpec: { Progress: string };
 }
 
 interface BadgeButtonContainerState {
@@ -74,7 +79,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         let errorMessage = "";
         if (props.onClickEvent === "callMicroflow" && !props.microflow) {
             errorMessage = "A 'Microflow' is required for 'Events' 'Call a microflow'";
-        } else if (props.onClickEvent === "callNanoflow" && !props.nanoflow) {
+        } else if (props.onClickEvent === "callNanoflow" && !props.nanoflow.nanoflow) {
             errorMessage = "A 'Nanoflow' is required for 'Events' 'Call a nanoflow'";
         } else if (props.onClickEvent === "showPage" && !props.page) {
             errorMessage = "A 'Page' is required for 'Events' 'Show a page'";

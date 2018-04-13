@@ -43,18 +43,9 @@ export function getPreviewCss() {
 }
 
 export function getVisibleProperties(props: BadgeButtonContainerProps, visibilityMap: VisibilityMap) {
-    if (props.onClickEvent === "doNothing") {
-        visibilityMap.microflow = false;
-        visibilityMap.nanoflow = false;
-        visibilityMap.page = false;
-    } else if (props.onClickEvent === "callMicroflow") {
-        visibilityMap.page = false;
-        visibilityMap.nanoflow = false;
-    } else if (props.onClickEvent === "callNanoflow") {
-        visibilityMap.page = false;
-        visibilityMap.microflow = false;
-    } else if (props.onClickEvent === "showPage") {
-        visibilityMap.microflow = false;
-        visibilityMap.nanoflow = false;
-    }
+    visibilityMap.microflow = props.onClickEvent === "callMicroflow";
+    visibilityMap.nanoflow = props.onClickEvent === "callNanoflow";
+    visibilityMap.page = props.onClickEvent === "showPage";
+
+    return visibilityMap;
 }
