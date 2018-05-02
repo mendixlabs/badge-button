@@ -160,10 +160,10 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
                     guids: [ mxObject.getGuid() ]
                 }
             });
-        } else if (onClickEvent === "callNanoflow" && nanoflow) {
+        } else if (onClickEvent === "callNanoflow" && nanoflow.nanoflow) {
             window.mx.data.callNanoflow({
                 context,
-                error: (error: Error) => mx.ui.error(`Error executing nanoflow ${nanoflow} : ${error.message}`),
+                error: error => window.mx.ui.error(`Error while executing nanoflow: ${nanoflow}: ${error.message}`),
                 nanoflow,
                 origin: mxform
             });
