@@ -19,6 +19,7 @@ export interface BadgeButtonContainerProps extends WrapperProps {
     nanoflow: Nanoflow;
     onClickEvent: OnClickOptions;
     page: string;
+    openPageAs: PageLocation;
 }
 
 interface Nanoflow {
@@ -32,6 +33,7 @@ interface BadgeButtonContainerState {
 }
 
 type OnClickOptions = "doNothing" | "showPage" | "callMicroflow" | "callNanoflow";
+type PageLocation = "content"| "popup" | "modal";
 
 export default class BadgeButtonContainer extends Component<BadgeButtonContainerProps, BadgeButtonContainerState> {
     private subscriptionHandles: number[];
@@ -145,7 +147,7 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
     }
 
     private handleOnClick() {
-        const { mxObject, onClickEvent, microflow, mxform, nanoflow, page } = this.props;
+        const { mxObject, onClickEvent, microflow, mxform, nanoflow, openPageAs, page } = this.props;
         if (!mxObject || !mxObject.getGuid()) {
             return;
         }
@@ -170,7 +172,8 @@ export default class BadgeButtonContainer extends Component<BadgeButtonContainer
         } else if (onClickEvent === "showPage" && page) {
             window.mx.ui.openForm(page, {
                 context,
-                error: error => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`)
+                error: error => window.mx.ui.error(`Error while opening page ${page}: ${error.message}`),
+                location: openPageAs
             });
         }
     }

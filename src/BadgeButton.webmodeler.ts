@@ -46,6 +46,7 @@ export function getVisibleProperties(props: BadgeButtonContainerProps, visibilit
     visibilityMap.microflow = props.onClickEvent === "callMicroflow";
     visibilityMap.nanoflow = props.onClickEvent === "callNanoflow";
     visibilityMap.page = props.onClickEvent === "showPage";
+    visibilityMap.openPageAs = props.onClickEvent === "showPage";
 
     return visibilityMap;
 }
